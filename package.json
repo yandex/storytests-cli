@@ -1,0 +1,10 @@
+{
+  "name": "storytests-cli",
+  "version": "0.0.1",
+  "description": "CLI utility to generate tests from Storybook stories",
+  "main": "index.js",
+  "repository": "https://github.com/yakovlev-alexey/storytests-cli",
+  "author": "Alexey Yakovlev <alexeyyakovlev0359@gmail.com>",
+  "license": "MIT",
+  "private": false
+}
