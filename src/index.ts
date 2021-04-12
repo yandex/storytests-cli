@@ -1,7 +1,7 @@
 type T = {
-  hello: "hello";
+    hello: 'hello';
 };
 
-const t: T = { hello: "hello" };
+const t: T = { hello: 'hello' };
 
 console.log((t as any).hello);
