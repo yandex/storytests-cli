@@ -10,7 +10,7 @@ import {
 import { loadArgs } from './args';
 import { loadConfig } from './config';
 
-const run = async () => {
+const run = async (): Promise<void> => {
     const { config: configPath, rewrite } = loadArgs();
 
     const config = await loadConfig(configPath);

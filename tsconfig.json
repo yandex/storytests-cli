@@ -5,7 +5,6 @@
         "moduleResolution": "node",
         "allowJs": false,
         "baseUrl": "./",
-        "typeRoots": ["./@types"],
         "removeComments": true,
         "isolatedModules": true,
         "strict": true,
@@ -16,5 +15,5 @@
         "resolveJsonModule": true
     },
     "include": ["**/*.ts"],
-    "exclude": ["build", "node_modules"]
+    "exclude": ["dist", "node_modules"]
 }
