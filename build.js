@@ -6,6 +6,6 @@ require('esbuild')
         platform: 'node',
         target: ['node10.4'],
         external: ['cosmiconfig', 'joi', 'yargs', 'glob'],
-        outfile: 'build/index.js',
+        outfile: 'dist/index.js',
     })
     .catch((err) => (console.error(err), process.exit(1)));
