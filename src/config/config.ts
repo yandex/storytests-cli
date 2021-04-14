@@ -8,8 +8,10 @@ const explorer = cosmiconfig('storytests', {
     searchPlaces: generateModuleNames('storytests'),
 });
 
-const loadConfig = async (): Promise<TConfig> => {
-    const result = await explorer.search();
+const loadConfig = async (configPath?: string | null): Promise<TConfig> => {
+    const result = await (configPath
+        ? explorer.load(configPath)
+        : explorer.search());
 
     if (!result || result.isEmpty) {
         throw new Error('Unable to find storytests config file');

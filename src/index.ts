@@ -11,9 +11,9 @@ import { loadArgs } from './args';
 import { loadConfig } from './config';
 
 const run = async () => {
-    const args = loadArgs();
+    const { config: configPath, rewrite } = loadArgs();
 
-    const config = await loadConfig();
+    const config = await loadConfig(configPath);
 
     const {
         generateFileName,
@@ -51,6 +51,7 @@ const run = async () => {
                     componentStories,
                     postfix,
                     testTemplate,
+                    rewrite,
                 );
 
                 return;
@@ -64,6 +65,7 @@ const run = async () => {
                     story,
                     postfix,
                     testTemplate,
+                    rewrite,
                 );
             });
         });
