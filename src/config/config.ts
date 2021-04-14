@@ -19,7 +19,7 @@ const loadConfig = async (configPath?: string | null): Promise<TConfig> => {
 
     const { config } = result;
 
-    schema.validateAsync(config);
+    await schema.validateAsync(config);
 
     return config;
 };
