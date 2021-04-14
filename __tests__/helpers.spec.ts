@@ -5,6 +5,17 @@ import * as helpers from '../src/helpers';
 import * as helpersMocks from '../__mocks__/helpers.mock';
 import * as helpersStubs from '../__mocks__/helpers.stub';
 
+jest.mock('glob', () => ({
+    __esModule: true,
+    default: jest.fn(),
+}));
+
+jest.mock('../src/helpers/fsExists', () => ({
+    __esModule: true,
+    fsExists: jest.fn(),
+}));
+
+import * as globModule from 'glob';
 import * as fsExistsModule from '../src/helpers/fsExists';
 
 const {
@@ -73,15 +84,27 @@ describe('helpers', () => {
         });
     });
 
+    describe('getStoryFiles', () => {
+        jest.spyOn(globModule, 'default')
+            // @ts-expect-error return value is unused
+            .mockImplementation((path, callback) => {
+                // @ts-expect-error function overload with callback is used
+                callback(null, [path, path, path]);
+                return {};
+            });
+
+        test('should return matched story file paths', () => {
+            expect(
+                getTestDirectoryPath(pathToStory, testDirectoryPath),
+            ).toEqual(pathToGeneratedTestDirectory);
+        });
+    });
+
     describe('generateTest', () => {
         const componentName = 'Components/RoundedButton';
         const componentStoryNames = ['SecondaryWithLongLabel'];
         const filename = 'rounded-button.hermione.js';
         const postfix = testFilePostfixes[0];
-
-        jest.mock('../src/helpers/fsExists', () => ({
-            fsExists: jest.fn(),
-        }));
 
         const fsExistsSpy = jest.spyOn(fsExistsModule, 'fsExists');
         const writeFileSpy = jest
