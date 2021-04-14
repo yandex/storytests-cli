@@ -20,7 +20,7 @@
     },
     "scripts": {
         "build": "node build.js",
-        "prepublishOnly": "npm run build",
+        "prepublishOnly": "yarn build",
         "clean": "rm -rf build",
         "lint": "npm-run-all lint:*",
         "lint:scripts": "eslint './**/*.{js,ts,tsx}'",
