@@ -15,8 +15,4 @@ type TConfig = {
     storyNamePattern: RegExp | string;
 };
 
-type TArgs = {
-    rewrite: boolean;
-};
-
-export type { TConfig, TArgs };
+export type { TConfig };

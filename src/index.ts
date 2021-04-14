@@ -4,7 +4,7 @@ import fs from 'fs';
 import {
     generateTest,
     getComponentName,
-    getComponentStoriesNames,
+    getComponentStories,
     getTestDirectoryPath,
 } from './helpers';
 import { loadArgs } from './args';
@@ -41,7 +41,7 @@ const run = async () => {
                 fileData,
                 componentNamePattern,
             );
-            const componentStories = getComponentStoriesNames(
+            const componentStories = getComponentStories(
                 fileData,
                 storyNamePattern,
             );

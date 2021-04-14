@@ -1,36 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-export const getComponentName = (
-    fileContent: string,
-    pattern: RegExp | string,
-): string => {
-    const matches = fileContent.match(pattern);
-
-    if (matches === null) {
-        throw new Error(
-            "Couldn't find component name, check componentNamePattern",
-        );
-    }
-
-    return matches[0];
-};
-
-export const getComponentStoriesNames = (
-    fileContent: string,
-    pattern: RegExp | string,
-): string[] => {
-    const matches = fileContent.match(pattern);
-
-    return matches === null ? [] : matches;
-};
-
-export const getTestDirectoryPath = (
-    pathToStory: string,
-    relatedPathToTestDirectory: string,
-): string => path.resolve(pathToStory, relatedPathToTestDirectory);
-
-export const generateTest = (
+const generateTest = (
     testDirectoryPath: string,
     filename: string,
     componentName: string,
@@ -61,3 +32,5 @@ export const generateTest = (
 
     fs.writeFileSync(testPath, content, 'utf8');
 };
+
+export { generateTest };
