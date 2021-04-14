@@ -1,8 +1,8 @@
-import glob from 'glob';
 import fs from 'fs';
 
 import {
     generateTest,
+    getStoryFiles,
     getComponentName,
     getComponentStories,
     getTestDirectoryPath,
@@ -26,55 +26,48 @@ const run = async () => {
         testFilePostfixes,
     } = config;
 
-    glob(storyFilesPath, (err, matches) => {
-        if (err) {
-            throw err;
+    const storyFiles = await getStoryFiles(storyFilesPath);
+
+    storyFiles.forEach((filePath) => {
+        if (!fs.existsSync(filePath)) {
+            throw new Error(`File ${filePath} does not exist`);
         }
 
-        matches.forEach((filePath) => {
-            if (!fs.existsSync(filePath)) {
-                throw new Error(`File ${filePath} does not exist`);
+        const fileData = fs.readFileSync(filePath, 'utf8');
+        const componentName = getComponentName(fileData, componentNamePattern);
+        const componentStories = getComponentStories(
+            fileData,
+            storyNamePattern,
+        );
+
+        const testDirectory = getTestDirectoryPath(
+            filePath,
+            relativeTestDirectoryPath,
+        );
+
+        testFilePostfixes.forEach((postfix) => {
+            if (testGenerationStrategy === 'component') {
+                generateTest(
+                    testDirectory,
+                    generateFileName(componentName, postfix),
+                    componentName,
+                    componentStories,
+                    postfix,
+                    testTemplate,
+                );
+
+                return;
             }
 
-            const fileData = fs.readFileSync(filePath, 'utf8');
-            const componentName = getComponentName(
-                fileData,
-                componentNamePattern,
-            );
-            const componentStories = getComponentStories(
-                fileData,
-                storyNamePattern,
-            );
-
-            const testDirectory = getTestDirectoryPath(
-                filePath,
-                relativeTestDirectoryPath,
-            );
-
-            testFilePostfixes.forEach((postfix) => {
-                if (testGenerationStrategy === 'component') {
-                    generateTest(
-                        testDirectory,
-                        generateFileName(componentName, postfix),
-                        componentName,
-                        componentStories,
-                        postfix,
-                        testTemplate,
-                    );
-
-                    return;
-                }
-
-                componentStories.forEach((story) => {
-                    generateTest(
-                        testDirectory,
-                        generateFileName(story, postfix),
-                        componentName,
-                        story,
-                        postfix,
-                        testTemplate,
-                    );
-                });
+            componentStories.forEach((story) => {
+                generateTest(
+                    testDirectory,
+                    generateFileName(story, postfix),
+                    componentName,
+                    story,
+                    postfix,
+                    testTemplate,
+                );
             });
         });
     });
