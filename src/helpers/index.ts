@@ -1,3 +1,4 @@
+export * from './fsExists';
 export * from './generateTest';
 export * from './getStoryFiles';
 export * from './getComponentName';

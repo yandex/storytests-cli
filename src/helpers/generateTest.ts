@@ -1,7 +1,9 @@
-import fs from 'fs';
+import { promises as fs } from 'fs';
 import path from 'path';
 
-const generateTest = (
+import { fsExists } from './fsExists';
+
+const generateTest = async (
     testDirectoryPath: string,
     filename: string,
     componentName: string,
@@ -13,10 +15,10 @@ const generateTest = (
         postfix: string,
     ) => string | false,
     rewrite = false,
-): void => {
+): Promise<void> => {
     const testPath = path.resolve(testDirectoryPath, filename);
 
-    if (!rewrite && fs.existsSync(testPath)) {
+    if (!rewrite && (await fsExists(testPath))) {
         return;
     }
 
@@ -26,11 +28,11 @@ const generateTest = (
         return;
     }
 
-    if (!fs.existsSync(testDirectoryPath)) {
-        fs.mkdirSync(testDirectoryPath, { recursive: true });
+    if (!(await fsExists(testDirectoryPath))) {
+        await fs.mkdir(testDirectoryPath, { recursive: true });
     }
 
-    fs.writeFileSync(testPath, content, 'utf8');
+    await fs.writeFile(testPath, content, 'utf8');
 };
 
 export { generateTest };

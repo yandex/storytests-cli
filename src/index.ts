@@ -1,4 +1,4 @@
-import fs from 'fs';
+import { promises as fs } from 'fs';
 
 import {
     generateTest,
@@ -28,12 +28,9 @@ const run = async () => {
 
     const storyFiles = await getStoryFiles(storyFilesPath);
 
-    storyFiles.forEach((filePath) => {
-        if (!fs.existsSync(filePath)) {
-            throw new Error(`File ${filePath} does not exist`);
-        }
+    storyFiles.forEach(async (filePath) => {
+        const fileData = await fs.readFile(filePath, 'utf8');
 
-        const fileData = fs.readFileSync(filePath, 'utf8');
         const componentName = getComponentName(fileData, componentNamePattern);
         const componentStories = getComponentStories(
             fileData,
