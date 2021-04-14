@@ -5,6 +5,7 @@
         "project": "./tsconfig.json"
     },
     "rules": {
-        "prettier/prettier": "error"
+        "prettier/prettier": "error",
+        "no-console": "error"
     }
 }
