@@ -50,13 +50,13 @@ You can also display a help message with `--help`.
     relativeTestDirectoryPath: string;
     ```
 
-    Path to the folder where test files will be created relative to the matched **file** (therefore if you want to create test files in the same folder, you should specify `'../'`).
+    Path to the folder where test files will be created relative to the matched file folder.
 
 -   ```ts
     testFilePostfixes: string[];
     ```
 
-    Postfixes for generated test files. For example, to create [`hermione`](https://github.com/gemini-testing/hermione) and `jest` test files you can specify `['hermione', 'test']` as the value.
+    Postfixes for generated test files. For example, to create [`hermione`](https://github.com/gemini-testing/hermione) and other generic test files you can specify `['hermione', 'test']` as the value.
 
 -   ```ts
     storyFilesPath: string[];
