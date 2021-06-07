@@ -19,9 +19,8 @@
         "storytests": "bin/cli.js"
     },
     "scripts": {
-        "build": "yarn && node build.js",
+        "build": "node build.js",
         "prepublishOnly": "yarn build",
-        "postversion": "yarn publish --non-interactive --registry https://registry.npmjs.org/ && echo \"Successfully released version $npm_package_version!\"",
         "clean": "rm -rf build",
         "lint": "npm-run-all lint:*",
         "lint:scripts": "eslint './**/*.{js,ts,tsx}'",
