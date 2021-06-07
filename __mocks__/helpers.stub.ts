@@ -6,7 +6,7 @@ const componentNamePattern = /(?<=title: ')[a-z/]+/gi;
 
 const storyNamePattern = /[a-z]+(?= = Template.bind\()/gi;
 
-const testDirectoryPath = '../../.generated-tests';
+const testDirectoryPath = '../.generated-tests';
 
 const testFilePostfixes = ['hermione'];
 
