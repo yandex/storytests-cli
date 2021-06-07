@@ -17,10 +17,17 @@ jobs:
         uses: 'phips28/gh-action-bump-version@master'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
         with:
           tag-prefix: ''
           minor-wording: 'feat,test'
           major-wording: 'feat!,BREAKING CHANGES'
           patch-wording: 'fix'
           commit-message: 'chore: bump version to {{version}} [skip ci]'
+
+      - name: 'Install dependencies'
+        run: yarn --frozen-lockfile
+
+      - name: 'Publish NPM'
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+        run: yarn publish --non-interactive --registry https://registry.npmjs.org/
