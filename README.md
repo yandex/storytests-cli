@@ -98,4 +98,4 @@ Inspired by [Storytests Webpack Plugin](https://github.com/yandex/storytests-web
 
 ## License
 
-[MPL 2.0](/LICENSE)
+[MPL-2.0](/LICENSE)

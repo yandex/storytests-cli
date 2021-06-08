@@ -5,7 +5,7 @@
     "main": "dist/index.js",
     "repository": "https://github.com/yandex/storytests-cli",
     "author": "Alexey Yakovlev <alexeyyakovlev0359@gmail.com>",
-    "license": "MIT",
+    "license": "MPL-2.0",
     "private": false,
     "files": [
         "dist/index.js",
