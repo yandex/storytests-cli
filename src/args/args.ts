@@ -6,10 +6,8 @@ const argsOptions = yargs
     .option('rewrite', {
         alias: 'r',
         describe: 'Rewrite existing test files',
-        type: 'boolean',
-        nargs: 1,
+        boolean: true,
         default: false,
-        demandOption: false,
     })
     .option('config', {
         alias: 'c',
