@@ -1,75 +1,45 @@
-import { promises as fs } from 'fs';
+import yargs from 'yargs';
 
-import {
-    generateTest,
-    getStoryFiles,
-    getComponentName,
-    getComponentStories,
-    getTestDirectoryPath,
-} from './helpers';
-import { loadArgs } from './args';
-import { loadConfig } from './config';
+import { generate } from 'src/commands/generate';
+import { init } from 'src/commands/init';
+import { TInitArgs } from './types/args';
 
-const run = async (): Promise<void> => {
-    const { config: configPath, rewrite } = loadArgs();
-
-    const config = await loadConfig(configPath);
-
-    const {
-        generateFileName,
-        componentNamePattern,
-        testGenerationStrategy,
-        testTemplate,
-        storyNamePattern,
-        storyFilesPath,
-        relativeTestDirectoryPath,
-        testFilePostfixes,
-    } = config;
-
-    const storyFiles = await getStoryFiles(storyFilesPath);
-
-    storyFiles.forEach(async (filePath) => {
-        const fileData = await fs.readFile(filePath, 'utf8');
-
-        const componentName = getComponentName(fileData, componentNamePattern);
-        const componentStories = getComponentStories(
-            fileData,
-            storyNamePattern,
-        );
-
-        const testDirectory = getTestDirectoryPath(
-            filePath,
-            relativeTestDirectoryPath,
-        );
-
-        testFilePostfixes.forEach((postfix) => {
-            if (testGenerationStrategy === 'component') {
-                generateTest(
-                    testDirectory,
-                    generateFileName(componentName, postfix),
-                    componentName,
-                    componentStories,
-                    postfix,
-                    testTemplate,
-                    rewrite,
-                );
-
-                return;
-            }
-
-            componentStories.forEach((story) => {
-                generateTest(
-                    testDirectory,
-                    generateFileName(story, postfix),
-                    componentName,
-                    story,
-                    postfix,
-                    testTemplate,
-                    rewrite,
-                );
+yargs
+    .command(
+        'init',
+        'Initialize default settings',
+        (yargs) => {
+            return yargs.option('template', {
+                alias: 't',
+                describe: 'Populate with options for testing framework',
+                choices: ['hermione', 'playwright'],
+                demandOption: false,
             });
-        });
-    });
-};
-
-export { run };
+        },
+        (args) => {
+            init(args as TInitArgs);
+        },
+    )
+    .command(
+        ['generate', '$0'],
+        'Generate test files according to config',
+        (yargs) => {
+            return yargs
+                .option('rewrite', {
+                    alias: 'r',
+                    describe: 'Rewrite existing test files',
+                    boolean: true,
+                    default: false,
+                })
+                .option('config', {
+                    alias: 'c',
+                    describe: 'Specify config path',
+                    type: 'string',
+                    nargs: 1,
+                    default: null,
+                    demandOption: false,
+                });
+        },
+        generate,
+    )
+    .parse();

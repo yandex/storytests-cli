@@ -1,8 +1,8 @@
 import { cosmiconfig } from 'cosmiconfig';
 
 import { schema } from './schema';
-import type { TConfig } from './types';
-import { generateModuleNames } from './generateModuleNames';
+import type { TConfig } from 'src/types/config';
+import { generateModuleNames } from 'src/helpers/generate-module-names';
 
 const explorer = cosmiconfig('storytests', {
     searchPlaces: generateModuleNames('storytests'),

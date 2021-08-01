@@ -1,7 +1,7 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 
-import { fsExists } from './fsExists';
+import { fsExists } from './fs-exists';
 
 const generateTest = async (
     testDirectoryPath: string,
