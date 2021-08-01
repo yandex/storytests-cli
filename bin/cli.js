@@ -5,4 +5,4 @@ process.on('unhandledRejection', (reason) => {
     process.exit(1);
 });
 
-require('../dist/index').run();
+require('../dist/index');
