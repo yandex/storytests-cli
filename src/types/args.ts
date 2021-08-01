@@ -3,8 +3,10 @@ type TGenerateArgs = {
     config: string | null;
 };
 
+type TTemplateTypes = 'hermione' | 'playwright';
+
 type TInitArgs = {
-    template?: 'hermione' | 'playwright';
+    template?: TTemplateTypes;
 };
 
-export type { TGenerateArgs, TInitArgs };
+export type { TGenerateArgs, TInitArgs, TTemplateTypes };
