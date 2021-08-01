@@ -10,13 +10,13 @@ jest.mock('glob', () => ({
     default: jest.fn(),
 }));
 
-jest.mock('../src/helpers/fsExists', () => ({
+jest.mock('../src/helpers/fs-exists', () => ({
     __esModule: true,
     fsExists: jest.fn(),
 }));
 
 import * as globModule from 'glob';
-import * as fsExistsModule from '../src/helpers/fsExists';
+import * as fsExistsModule from '../src/helpers/fs-exists';
 
 const {
     generateTest,
