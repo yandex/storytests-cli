@@ -28,7 +28,15 @@ yarn add -D storytests-cli
 
 Prerequisites: [Node.js](https://nodejs.org/en/) (`>10.4.0`).
 
-Create a config file named `storytests.config.js`, names like `storytestsrc.cjs` or `storytests.conf.js` would also work. Read about [configuration](#configuration) in detail.
+Initialize a basic configuration by running `storytests-cli` with:
+
+```bash
+npm run storytests init
+# or
+yarn storytests init
+```
+
+You can also provide a template via `-t, --template` argument to generate a [`hermione`](https://github.com/gemini-testing/hermione) preset or a [`playwright`](https://playwright.dev) one. You could also create a config file named `storytests.config.js` yourself, names like `storytestsrc.cjs` or `storytests.conf.js` would also work. Read about [configuration](#configuration) in detail.
 
 When configured can be run with:
 
