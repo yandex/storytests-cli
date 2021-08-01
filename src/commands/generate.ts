@@ -1,13 +1,12 @@
 import { promises as fs } from 'fs';
 
-import {
-    generateTest,
-    getStoryFiles,
-    getComponentName,
-    getComponentStories,
-    getTestDirectoryPath,
-} from 'src/helpers';
-import { loadConfig } from 'src/config';
+import { loadConfig } from 'src/config/config';
+import { generateTest } from 'src/helpers/generate-test';
+import { getStoryFiles } from 'src/helpers/get-story-files';
+import { getComponentName } from 'src/helpers/get-component-name';
+import { getComponentStories } from 'src/helpers/get-component-stories';
+import { getTestDirectoryPath } from 'src/helpers/get-test-directory-path';
+
 import type { TGenerateArgs } from 'src/types/args';
 
 const generate = async ({
