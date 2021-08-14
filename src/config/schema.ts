@@ -1,18 +1,62 @@
-import Joi from 'joi';
+import type { TConfig } from 'src/types/config';
 
 const isRegExp = (value: unknown): value is RegExp => value instanceof RegExp;
 
-const schema = Joi.object({
-    testTemplate: Joi.func(),
-    generateFileName: Joi.func(),
+// eslint-disable-next-line @typescript-eslint/ban-types
+const isFunction = (value: unknown): value is Function =>
+    typeof value === 'function';
 
-    storyFilesPath: Joi.string(),
-    relativeTestDirectoryPath: Joi.string(),
-    testFilePostfixes: Joi.array().items(Joi.string()),
-    testGenerationStrategy: Joi.allow('story', 'component'),
+const isString = (value: unknown): value is string => typeof value === 'string';
 
-    componentNamePattern: Joi.custom(isRegExp),
-    storyNamePattern: Joi.custom(isRegExp),
-});
+const isArray = <T>(isType: (value: unknown) => value is T) => {
+    return (value: unknown): value is Array<T> =>
+        Array.isArray(value) && value.length > 0 && value.every(isType);
+};
+
+const isStrategy = (value: unknown): value is 'story' | 'component' =>
+    value === 'story' || value === 'component';
+
+const generateErrorMessage = (key: string, expected: string) =>
+    `Config key ${key} must be ${expected}`;
+
+const schema: Record<keyof TConfig, [(_: unknown) => boolean, string]> = {
+    testTemplate: [
+        isFunction,
+        generateErrorMessage('testTemplate', 'a function'),
+    ],
+    generateFileName: [
+        isFunction,
+        generateErrorMessage('generateFileName', 'a function'),
+    ],
+
+    storyFilesPath: [
+        isString,
+        generateErrorMessage('storyFilesPath', 'a string'),
+    ],
+    relativeTestDirectoryPath: [
+        isString,
+        generateErrorMessage('relativeTestDirectoryPath', 'a string'),
+    ],
+    testFilePostfixes: [
+        isArray(isString),
+        generateErrorMessage('testFilesPostfixes', 'an array of strings'),
+    ],
+    testGenerationStrategy: [
+        isStrategy,
+        generateErrorMessage(
+            'testGenerationStrategy',
+            'one of "component" or "story"',
+        ),
+    ],
+
+    componentNamePattern: [
+        isRegExp,
+        generateErrorMessage('componentNamePattern', 'a regular expression'),
+    ],
+    storyNamePattern: [
+        isRegExp,
+        generateErrorMessage('componentNamePattern', 'a regular expression'),
+    ],
+};
 
 export { schema };
