@@ -2,9 +2,9 @@ import yargs from 'yargs';
 
 import { generate } from 'src/commands/generate';
 import { init } from 'src/commands/init';
-import { TInitArgs } from './types/args';
+import type { TInitArgs } from './types/args';
 
-yargs
+const argv = yargs
     .command(
         'init',
         'Initialize default settings',
@@ -42,4 +42,19 @@ yargs
         },
         generate,
     )
+    .option('verbose', {
+        boolean: true,
+        describe: 'Print error stacktraces',
+        demandOption: false,
+    })
+    .fail((msg, err) => {
+        /* eslint-disable no-console */
+        console.error(argv.verbose ? err : `Error: ${msg || err.message}`);
+        console.error(
+            'Please refer to the README at https://github.com/yandex/storytests-cli#readme or leave an issue there',
+        );
+        /* eslint-enable no-console */
+
+        process.exit(1);
+    })
     .parse();
