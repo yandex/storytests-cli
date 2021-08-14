@@ -1,6 +1,6 @@
 # Storytests CLI
 
-CLI Utility to generate test files from matched [Storybook](https://storybook.js.org/) files.
+Framework agnostic CLI Utility to generate test files from matched [Storybook](https://storybook.js.org/) files.
 
 ## Table of Contents
 
@@ -36,7 +36,9 @@ npm run storytests init
 yarn storytests init
 ```
 
-You can also provide a template via `-t, --template` argument to generate a [`hermione`](https://github.com/gemini-testing/hermione) preset or a [`playwright`](https://playwright.dev) one. You could also create a config file named `storytests.config.js` yourself, names like `storytestsrc.cjs` or `storytests.conf.js` would also work. Read about [configuration](#configuration) in detail.
+Currently all templates including the default one are preconfigured for React and Storybook@^6.0.0. However this utility is agnostic of framework or Storybook version and you may contribute with your own templates. Existing templates can be used by providing `-t, --template` argument and they include a [`hermione`](https://github.com/gemini-testing/hermione) preset, [`puppeteer`](https://github.com/puppeteer/puppeteer) preset or a [`playwright`](https://playwright.dev) one with respective argument names.
+
+You could also create a config file named `storytests.config.js` yourself, names like `storytestsrc.cjs` or `storytests.conf.js` would also work. Read about [configuration](#configuration) in detail.
 
 When configured can be run with:
 
