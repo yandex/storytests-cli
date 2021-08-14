@@ -11,8 +11,9 @@ const argv = yargs
         (yargs) => {
             return yargs.option('template', {
                 alias: 't',
-                describe: 'Populate with options for testing framework',
-                choices: ['hermione', 'playwright'],
+                describe: `Populate with predefined options for
+                    a testing framework or provide your own GitHub Gist ID`,
+                choices: ['hermione', 'playwright', 'puppeteer'],
                 demandOption: false,
             });
         },
@@ -49,7 +50,7 @@ const argv = yargs
     })
     .fail((msg, err) => {
         /* eslint-disable no-console */
-        console.error(argv.verbose ? err : `Error: ${msg || err.message}`);
+        console.error(argv?.verbose ? err : `Error: ${msg || err.message}`);
         console.error(
             'Please refer to the README at https://github.com/yandex/storytests-cli#readme or leave an issue there',
         );

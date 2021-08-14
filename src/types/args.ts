@@ -3,7 +3,7 @@ type TGenerateArgs = {
     config: string | null;
 };
 
-type TTemplateTypes = 'hermione' | 'playwright';
+type TTemplateTypes = 'hermione' | 'playwright' | 'puppeteer';
 
 type TInitArgs = {
     template?: TTemplateTypes;
