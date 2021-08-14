@@ -1,6 +1,6 @@
 import { cosmiconfig } from 'cosmiconfig';
 
-import { schema } from './schema';
+import { validateConfig } from './validate-config';
 import type { TConfig } from 'src/types/config';
 import { generateModuleNames } from 'src/helpers/generate-module-names';
 
@@ -19,7 +19,7 @@ const loadConfig = async (configPath?: string | null): Promise<TConfig> => {
 
     const { config } = result;
 
-    await schema.validateAsync(config);
+    validateConfig(config);
 
     return config;
 };
