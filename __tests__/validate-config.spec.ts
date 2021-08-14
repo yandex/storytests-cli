@@ -70,7 +70,7 @@ describe('validate-config', () => {
         expect(validateForValue(config)).toThrowError(/storyNamePattern/);
     });
 
-    test('fails when a excess fields are provided and enumerates them', () => {
+    test('fails when excess fields are provided and enumerates them', () => {
         config['excessField1'] = 1;
         config['excessField2'] = 2;
         expect(validateForValue(config)).toThrowError(
