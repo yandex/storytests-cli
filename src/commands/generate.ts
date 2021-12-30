@@ -1,7 +1,5 @@
 import { promises as fs } from 'fs';
 
-import { loadConfig } from 'config/config';
-
 import { generateTest } from 'utils/generate-test';
 import { getStoryFiles } from 'utils/get-story-files';
 import { getComponentName } from 'utils/get-component-name';
@@ -10,12 +8,7 @@ import { getTestDirectoryPath } from 'utils/get-test-directory-path';
 
 import type { GenerateArgs } from 'types/args';
 
-const generate = async ({
-    config: configPath,
-    rewrite,
-}: GenerateArgs): Promise<void> => {
-    const config = await loadConfig(configPath);
-
+const generate = async ({ config, rewrite }: GenerateArgs): Promise<void> => {
     const {
         generateFileName,
         componentNamePattern,

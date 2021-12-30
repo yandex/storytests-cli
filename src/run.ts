@@ -1,5 +1,7 @@
 import yargs from 'yargs';
 
+import { injectConfig } from 'utils/inject-config';
+
 import { generate } from 'commands/generate';
 import { init } from 'commands/init';
 
@@ -42,7 +44,7 @@ const args = yargs
                     demandOption: false,
                 });
         },
-        generate,
+        injectConfig(generate),
     )
     .option('verbose', {
         boolean: true,

@@ -1,6 +1,8 @@
+import type { Config } from './config';
+
 type GenerateArgs = {
     rewrite: boolean;
-    config: string | null;
+    config: Config;
 };
 
 type TemplateTypes = 'hermione' | 'playwright' | 'puppeteer';
