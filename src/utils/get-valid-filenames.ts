@@ -1,10 +1,10 @@
-import { Config } from '../types/config';
+import type { Config } from '../types/config';
 
 const getValidFilenames = (
     component: string,
     stories: string[],
     postfixes: string[],
-    strategy: Config['testGenerationStrategy'],
+    strategy: Config['strategy'],
     generateFileName: Config['generateFileName'],
 ): string[] => {
     if (strategy === 'component') {

@@ -13,35 +13,36 @@ import type { CleanupArgs } from '../types/args';
 const cleanup = async ({ config, dry = true }: CleanupArgs): Promise<void> => {
     const {
         generateFileName,
-        componentNamePattern,
-        testGenerationStrategy,
-        storyNamePattern,
-        storyFilesPath,
-        relativeTestDirectoryPath,
-        testFilePostfixes,
+        componentPattern,
+        strategy,
+        storyPattern,
+        filesGlob,
+        testDirectory,
+        postfixes,
         validateFileName = () => false,
     } = config;
 
-    const storyFiles = await getStoryFiles(storyFilesPath);
+    const storyFiles = await getStoryFiles(filesGlob);
 
     storyFiles.forEach(async (path) => {
         const fileData = await fs.readFile(path, 'utf8');
 
-        const component = getComponentName(fileData, componentNamePattern);
-        const stories = getComponentStories(fileData, storyNamePattern);
+        const component = getComponentName(fileData, componentPattern);
+        const stories = getComponentStories(fileData, storyPattern);
 
-        const testDirectory = getTestDirectoryPath(
+        const testDirPath = getTestDirectoryPath(
+            component,
             path,
-            relativeTestDirectoryPath,
+            testDirectory,
         );
 
-        const files = await readDirectoryRecur(testDirectory);
+        const files = await readDirectoryRecur(testDirPath);
 
         const validNames = getValidFilenames(
             component,
             stories,
-            testFilePostfixes,
-            testGenerationStrategy,
+            postfixes,
+            strategy,
             generateFileName,
         );
 

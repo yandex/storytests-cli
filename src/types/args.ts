@@ -5,13 +5,13 @@ type GenerateArgs = {
     config: Pick<
         Config,
         | 'generateFileName'
-        | 'componentNamePattern'
-        | 'testGenerationStrategy'
-        | 'testTemplate'
-        | 'storyNamePattern'
-        | 'storyFilesPath'
-        | 'relativeTestDirectoryPath'
-        | 'testFilePostfixes'
+        | 'componentPattern'
+        | 'strategy'
+        | 'generateTest'
+        | 'storyPattern'
+        | 'filesGlob'
+        | 'testDirectory'
+        | 'postfixes'
     >;
 };
 
@@ -20,12 +20,12 @@ type CleanupArgs = {
     config: Pick<
         Config,
         | 'generateFileName'
-        | 'testGenerationStrategy'
-        | 'storyFilesPath'
-        | 'storyNamePattern'
-        | 'componentNamePattern'
-        | 'testFilePostfixes'
-        | 'relativeTestDirectoryPath'
+        | 'strategy'
+        | 'filesGlob'
+        | 'storyPattern'
+        | 'componentPattern'
+        | 'postfixes'
+        | 'testDirectory'
         | 'validateFileName'
     >;
 };

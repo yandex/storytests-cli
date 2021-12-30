@@ -17,7 +17,7 @@ jest.mock('../src/utils/fs-exists', () => ({
 import * as globModule from 'glob';
 import * as fsExistsModule from '../src/utils/fs-exists';
 
-import { generateTest } from '../src/utils/generate-test';
+import { generateTestFile } from '../src/utils/generate-test-file';
 import { getComponentName } from '../src/utils/get-component-name';
 import { getComponentStories } from '../src/utils/get-component-stories';
 import { getTestDirectoryPath } from '../src/utils/get-test-directory-path';
@@ -74,10 +74,22 @@ describe('utils', () => {
     });
 
     describe('getTestDirectoryPath', () => {
-        test('should return path to generated test directory', () => {
+        test('should return path to generated test directory if it is a relative path', () => {
             expect(
-                getTestDirectoryPath(pathToStory, testDirectoryPath),
+                getTestDirectoryPath('', pathToStory, testDirectoryPath),
             ).toEqual(pathToGeneratedTestDirectory);
+        });
+
+        test('should return value from function if a function is passed', () => {
+            expect(getTestDirectoryPath('', pathToStory, () => 'path')).toEqual(
+                'path',
+            );
+        });
+
+        test('should return testDirectory value if it is an absolute path', () => {
+            expect(
+                getTestDirectoryPath('', pathToStory, '/users/Admin/smth'),
+            ).toEqual('/users/Admin/smth');
         });
     });
 
@@ -92,12 +104,12 @@ describe('utils', () => {
 
         test('should return matched story file paths', () => {
             expect(
-                getTestDirectoryPath(pathToStory, testDirectoryPath),
+                getTestDirectoryPath('', pathToStory, testDirectoryPath),
             ).toEqual(pathToGeneratedTestDirectory);
         });
     });
 
-    describe('generateTest', () => {
+    describe('generateTestFile', () => {
         const componentName = 'Components/RoundedButton';
         const componentStoryNames = ['SecondaryWithLongLabel'];
         const filename = 'rounded-button.hermione.js';
@@ -118,8 +130,12 @@ describe('utils', () => {
                 () => new Promise((resolve) => resolve(false)),
             );
 
-            await generateTest(
-                getTestDirectoryPath(pathToStory, testDirectoryPath),
+            await generateTestFile(
+                getTestDirectoryPath(
+                    componentName,
+                    pathToStory,
+                    testDirectoryPath,
+                ),
                 filename,
                 componentName,
                 componentStoryNames,
@@ -136,8 +152,12 @@ describe('utils', () => {
                 () => new Promise((resolve) => resolve(true)),
             );
 
-            await generateTest(
-                getTestDirectoryPath(pathToStory, testDirectoryPath),
+            await generateTestFile(
+                getTestDirectoryPath(
+                    componentName,
+                    pathToStory,
+                    testDirectoryPath,
+                ),
                 filename,
                 componentName,
                 componentStoryNames,
@@ -154,8 +174,12 @@ describe('utils', () => {
                 () => new Promise((resolve) => resolve(true)),
             );
 
-            await generateTest(
-                getTestDirectoryPath(pathToStory, testDirectoryPath),
+            await generateTestFile(
+                getTestDirectoryPath(
+                    componentName,
+                    pathToStory,
+                    testDirectoryPath,
+                ),
                 filename,
                 componentName,
                 componentStoryNames,
@@ -173,8 +197,12 @@ describe('utils', () => {
                 () => new Promise((resolve) => resolve(false)),
             );
 
-            await generateTest(
-                getTestDirectoryPath(pathToStory, testDirectoryPath),
+            await generateTestFile(
+                getTestDirectoryPath(
+                    componentName,
+                    pathToStory,
+                    testDirectoryPath,
+                ),
                 filename,
                 componentName,
                 componentStoryNames,

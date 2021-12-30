@@ -1,5 +1,5 @@
 type Config = {
-    testTemplate: (
+    generateTest: (
         component: string,
         story: string | string[],
         postfix: string,
@@ -10,13 +10,13 @@ type Config = {
         postfix: string,
     ) => string;
 
-    storyFilesPath: string;
-    relativeTestDirectoryPath: string;
-    testFilePostfixes: string[];
-    testGenerationStrategy: 'component' | 'story';
+    filesGlob: string;
+    testDirectory: ((component: string, path: string) => string) | string;
+    postfixes: string[];
+    strategy: 'component' | 'story';
 
-    componentNamePattern: RegExp | string;
-    storyNamePattern: RegExp | string;
+    componentPattern: RegExp | string;
+    storyPattern: RegExp | string;
 
     validateFileName?: (
         path: string,

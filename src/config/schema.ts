@@ -14,47 +14,42 @@ const generateErrorMessage = (key: string, expected: string) =>
     `Config key ${key} must be ${expected}`;
 
 const schema: Schema<Config> = {
-    testTemplate: [
+    generateTest: [
         isFunction,
-        generateErrorMessage('testTemplate', 'a function'),
+        generateErrorMessage('generateTest', 'a function'),
     ],
     generateFileName: [
         isFunction,
         generateErrorMessage('generateFileName', 'a function'),
     ],
 
-    storyFilesPath: [
-        isString,
-        generateErrorMessage('storyFilesPath', 'a string'),
+    filesGlob: [isString, generateErrorMessage('filesGlob', 'a string')],
+    testDirectory: [
+        // eslint-disable-next-line @typescript-eslint/ban-types
+        combine<Function | string>(isFunction, isString),
+        generateErrorMessage('testDirectory', 'a string or a function'),
     ],
-    relativeTestDirectoryPath: [
-        isString,
-        generateErrorMessage('relativeTestDirectoryPath', 'a string'),
-    ],
-    testFilePostfixes: [
+    postfixes: [
         isArray(isString),
-        generateErrorMessage('testFilesPostfixes', 'an array of strings'),
+        generateErrorMessage('postfixes', 'an array of strings'),
     ],
-    testGenerationStrategy: [
+    strategy: [
         isStrategy,
-        generateErrorMessage(
-            'testGenerationStrategy',
-            'one of "component" or "story"',
-        ),
+        generateErrorMessage('strategy', 'one of "component" or "story"'),
     ],
 
-    componentNamePattern: [
+    componentPattern: [
         isRegExp,
-        generateErrorMessage('componentNamePattern', 'a regular expression'),
+        generateErrorMessage('componentPattern', 'a regular expression'),
     ],
-    storyNamePattern: [
+    storyPattern: [
         isRegExp,
-        generateErrorMessage('storyNamePattern', 'a regular expression'),
+        generateErrorMessage('storyPattern', 'a regular expression'),
     ],
 
     validateFileName: [
         combine(isFunction, isOptional),
-        generateErrorMessage('validateFileName', 'a function'),
+        generateErrorMessage('validateFileName', 'an optional function'),
     ],
 };
 

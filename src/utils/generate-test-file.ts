@@ -1,19 +1,16 @@
 import { promises as fs } from 'fs';
 import path from 'path';
+import { Config } from 'types/config';
 
 import { fsExists } from './fs-exists';
 
-const generateTest = async (
+const generateTestFile = async (
     testDirectoryPath: string,
     filename: string,
     componentName: string,
     componentStoryNames: string | string[],
     postfix: string,
-    testTemplate: (
-        component: string,
-        stories: string | string[],
-        postfix: string,
-    ) => string | false,
+    generateTest: Config['generateTest'],
     rewrite = false,
 ): Promise<void> => {
     const testPath = path.resolve(testDirectoryPath, filename);
@@ -22,7 +19,7 @@ const generateTest = async (
         return;
     }
 
-    const content = testTemplate(componentName, componentStoryNames, postfix);
+    const content = generateTest(componentName, componentStoryNames, postfix);
 
     if (content === false) {
         return;
@@ -35,4 +32,4 @@ const generateTest = async (
     await fs.writeFile(testPath, content, 'utf8');
 };
 
-export { generateTest };
+export { generateTestFile };

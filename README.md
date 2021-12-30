@@ -62,50 +62,50 @@ You can also display a help message with `--help`.
 `storytests-cli` can be configured with the following properties:
 
 -   ```ts
-    testGenerationStrategy: 'component' | 'story';
+    strategy: 'component' | 'story';
     ```
 
     When set to `'component'` a separate test file will be created for every matched **file**. When set to `'story'` a separate test file will be created for every matched **story** in a file.
 
 -   ```ts
-    relativeTestDirectoryPath: string;
+    testDirectoy: ((component: string, path: string) => string) | string;
     ```
 
-    Path to the folder where test files will be created relative to the matched file folder.
+    Path to the folder where test files will be created relative to the matched file folder. Can be either a function or a string. Relative paths are supported: in this case they will be resolve against matched file directory.
 
 -   ```ts
-    testFilePostfixes: string[];
+    postfixes: string[];
     ```
 
     Postfixes for generated test files. For example, to create [`hermione`](https://github.com/gemini-testing/hermione) and other generic test files you can specify `['hermione', 'test']` as the value.
 
 -   ```ts
-    storyFilesPath: string[];
+    filesGlob: string;
     ```
 
     Absolute path glob pattern to match desired story files.
 
 -   ```ts
-    componentNamePattern: RegExp;
+    componentPattern: RegExp;
     ```
 
     RegExp to match the component name in a Storybook file.
 
 -   ```ts
-    storyNamePattern: RegExp;
+    storyPattern: RegExp;
     ```
 
     RegExp to match the story names in a Storybook file.
 
 -   ```ts
-    testTemplate: (
+    generateTest: (
         component: string,
         story: string | string[],
         postfix: string,
     ) => string | false;
     ```
 
-    A function that gets called for every file with every possible combination of stories/postfixes and should return test file content. Recieves matched component name (the result of the match from `componentNamePattern`), stories matched from `storyNamePattern` in the file or a single story name (if `testGenerationStrategy` is set to `'story'`), as well as the postfix from `testFilePostfixes`. This function could also return `false` (not any other falsy value though), then no test file for this combination of arguments will be created.
+    A function that gets called for every file with every possible combination of stories/postfixes and should return test file content. Recieves matched component name (the result of the match from `componentPattern`), stories matched from `storyPattern` in the file or a single story name (if `strategy` is set to `'story'`), as well as the postfix from `postfixes`. This function could also return `false` (not any other falsy value though), then no test file for this combination of arguments will be created.
 
 -   ```ts
     generateFileName: (
@@ -115,14 +115,14 @@ You can also display a help message with `--help`.
     ) => string;
     ```
 
-    A function that gets called before `testTemplate` and should return the file name. Has identical signature to `testTemplate` except it should not return `false`.
+    A function that gets called before `generateTest` and should return the file name. Has identical signature to `generateTest` except it should not return `false`.
 
 -   ```ts
     validateFileName: (path: string, component: string, stories: string[]) =>
         boolean;
     ```
 
-    A function that gets called for every unvalidated file when running `cleanup` command. `path` parameter stores relative path from test directory (calculated using `relativeTestDirectoryPath`). `component` and `stories` parameters store matched component names and all matched stories (matches from `componentNamePattern` and `storyNamePattern`). Should return `true` if file is valid and `false` if file shoudl get removed (e.g. a screenshot from a removed story).
+    A function that gets called for every unvalidated file when running `cleanup` command. `path` parameter stores relative path from test directory (calculated using `testDirectory`). `component` and `stories` parameters store matched component names and all matched stories (matches from `componentPattern` and `storyPattern`). Should return `true` if file is valid and `false` if file shoudl get removed (e.g. a screenshot from a removed story).
 
 ## Example
 
@@ -174,7 +174,7 @@ module.exports = {
      * } as Meta;
      * ```
      */
-    componentNamePattern: /(?<=title: ")[a-z/]+/gi,
+    componentPattern: /(?<=title: ")[a-z/]+/gi,
 
     /**
      * Should match `Primary`
@@ -188,36 +188,36 @@ module.exports = {
      * export const Playground = Template.bind({});
      * ```
      */
-    storyNamePattern: /(?<!\/\/ @storytests-ignore[ \r\n]export const )\b[a-z]+(?= = Template.bind\()/gi,
+    storyPattern: /(?<!\/\/ @storytests-ignore[ \r\n]export const )\b[a-z]+(?= = Template.bind\()/gi,
 
     /**
      * Generate a single test file for a single component, not for every story
      */
-    testGenerationStrategy: 'component',
+    strategy: 'component',
 
     /**
      * Generate test files in the same directory as stories file
      */
-    relativeTestDirectoryPath: './',
+    testDirectory: './',
 
     /**
      * Generate `hermione` and `playwright` (though we can use any names here, they get passed to our hooks)
      */
-    testFilePostfixes: ['hermione', 'playwright'],
+    postfixes: ['hermione', 'playwright'],
 
     /**
      * Glob pattern to match story files
      */
-    storyFilesPath: path.resolve(__dirname, './src/**/*.stories.tsx'),
+    filesGlob: path.resolve(__dirname, './src/**/*.stories.tsx'),
 
     /**
      * A hook function to generate test file contents
-     * @param {string} componentPath component name (match from `componentNamePattern`)
-     * @param {string[]} stories story names as an array (matches from `storyNamePattern`, could be empty)
+     * @param {string} componentPath component name (match from `componentPattern`)
+     * @param {string[]} stories story names as an array (matches from `storyPattern`, could be empty)
      * @param {string} postfix test file postfix
      * @returns {string|false} could return false then this file will not be generated
      */
-    testTemplate: (componentPath, stories, postfix) => {
+    generateTest: (componentPath, stories, postfix) => {
         switch (postfix) {
             case 'hermione':
                 return hermioneTemplate(componentPath, stories);
@@ -231,7 +231,7 @@ module.exports = {
     /**
      * A hook function to generate file name
      */
-    generateFileName: (componentPath, postfix) => {
+    generateFileName: (componentPath, _stories, postfix) => {
         const componentParts = componentPath.split('/');
 
         const component = componentParts[

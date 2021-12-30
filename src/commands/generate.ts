@@ -1,7 +1,7 @@
 import { promises as fs } from 'fs';
 
-import { generateTest } from '../utils/generate-test';
 import { getStoryFiles } from '../utils/get-story-files';
+import { generateTestFile } from '../utils/generate-test-file';
 import { getComponentName } from '../utils/get-component-name';
 import { getComponentStories } from '../utils/get-component-stories';
 import { getTestDirectoryPath } from '../utils/get-test-directory-path';
@@ -11,54 +11,52 @@ import type { GenerateArgs } from '../types/args';
 const generate = async ({ config, rewrite }: GenerateArgs): Promise<void> => {
     const {
         generateFileName,
-        componentNamePattern,
-        testGenerationStrategy,
-        testTemplate,
-        storyNamePattern,
-        storyFilesPath,
-        relativeTestDirectoryPath,
-        testFilePostfixes,
+        componentPattern,
+        strategy,
+        generateTest,
+        storyPattern,
+        filesGlob,
+        testDirectory,
+        postfixes,
     } = config;
 
-    const storyFiles = await getStoryFiles(storyFilesPath);
+    const storyFiles = await getStoryFiles(filesGlob);
 
     storyFiles.forEach(async (filePath) => {
         const fileData = await fs.readFile(filePath, 'utf8');
 
-        const componentName = getComponentName(fileData, componentNamePattern);
-        const componentStories = getComponentStories(
-            fileData,
-            storyNamePattern,
-        );
+        const component = getComponentName(fileData, componentPattern);
+        const stories = getComponentStories(fileData, storyPattern);
 
-        const testDirectory = getTestDirectoryPath(
+        const testDirPath = getTestDirectoryPath(
+            component,
             filePath,
-            relativeTestDirectoryPath,
+            testDirectory,
         );
 
-        testFilePostfixes.forEach((postfix) => {
-            if (testGenerationStrategy === 'component') {
-                generateTest(
-                    testDirectory,
-                    generateFileName(componentName, componentStories, postfix),
-                    componentName,
-                    componentStories,
+        postfixes.forEach((postfix) => {
+            if (strategy === 'component') {
+                generateTestFile(
+                    testDirPath,
+                    generateFileName(component, stories, postfix),
+                    component,
+                    stories,
                     postfix,
-                    testTemplate,
+                    generateTest,
                     rewrite,
                 );
 
                 return;
             }
 
-            componentStories.forEach((story) => {
-                generateTest(
-                    testDirectory,
-                    generateFileName(componentName, story, postfix),
-                    componentName,
+            stories.forEach((story) => {
+                generateTestFile(
+                    testDirPath,
+                    generateFileName(component, story, postfix),
+                    component,
                     story,
                     postfix,
-                    testTemplate,
+                    generateTest,
                     rewrite,
                 );
             });
