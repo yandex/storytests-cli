@@ -1,11 +1,11 @@
 import { promises as fs } from 'fs';
 
-import { getStoryFiles } from 'utils/get-story-files';
-import { getComponentName } from 'utils/get-component-name';
-import { getComponentStories } from 'utils/get-component-stories';
-import { getTestDirectoryPath } from 'utils/get-test-directory-path';
+import { getStoryFiles } from '../utils/get-story-files';
+import { getComponentName } from '../utils/get-component-name';
+import { getComponentStories } from '../utils/get-component-stories';
+import { getTestDirectoryPath } from '../utils/get-test-directory-path';
 
-import type { CleanupArgs } from 'types/args';
+import type { CleanupArgs } from '../types/args';
 
 const cleanup = async ({ config }: CleanupArgs): Promise<void> => {
     const {

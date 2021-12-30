@@ -1,7 +1,7 @@
-import { loadConfig } from 'config/config';
+import { loadConfig } from '../config/config';
 
-import type { ArgsParams, Command, ConfiguredCommand } from 'types/commands';
-import type { Config } from 'types/config';
+import type { ArgsParams, Command, ConfiguredCommand } from '../types/commands';
+import type { Config } from '../types/config';
 
 const injectConfig = <T extends { config: Config }, R>(
     command: Command<T, R>,

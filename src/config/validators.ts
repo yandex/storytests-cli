@@ -1,4 +1,4 @@
-import { Validator } from 'types/config';
+import { Validator } from '../types/config';
 
 const isOptional = (value: unknown): value is undefined =>
     typeof value === 'undefined';

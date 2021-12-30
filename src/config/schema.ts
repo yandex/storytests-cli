@@ -1,4 +1,5 @@
-import type { Config, Schema } from 'types/config';
+import type { Config, Schema } from '../types/config';
+
 import {
     combine,
     isArray,

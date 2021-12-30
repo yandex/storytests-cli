@@ -1,12 +1,12 @@
 import yargs from 'yargs';
 
-import { injectConfig } from 'utils/inject-config';
+import { injectConfig } from './utils/inject-config';
 
-import { generate } from 'commands/generate';
-import { cleanup } from 'commands/cleanup';
-import { init } from 'commands/init';
+import { generate } from './commands/generate';
+import { cleanup } from './commands/cleanup';
+import { init } from './commands/init';
 
-import type { InitArgs } from 'types/args';
+import type { InitArgs } from './types/args';
 
 const args = yargs
     .command(

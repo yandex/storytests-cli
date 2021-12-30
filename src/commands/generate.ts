@@ -1,12 +1,12 @@
 import { promises as fs } from 'fs';
 
-import { generateTest } from 'utils/generate-test';
-import { getStoryFiles } from 'utils/get-story-files';
-import { getComponentName } from 'utils/get-component-name';
-import { getComponentStories } from 'utils/get-component-stories';
-import { getTestDirectoryPath } from 'utils/get-test-directory-path';
+import { generateTest } from '../utils/generate-test';
+import { getStoryFiles } from '../utils/get-story-files';
+import { getComponentName } from '../utils/get-component-name';
+import { getComponentStories } from '../utils/get-component-stories';
+import { getTestDirectoryPath } from '../utils/get-test-directory-path';
 
-import type { GenerateArgs } from 'types/args';
+import type { GenerateArgs } from '../types/args';
 
 const generate = async ({ config, rewrite }: GenerateArgs): Promise<void> => {
     const {

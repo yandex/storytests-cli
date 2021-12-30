@@ -3,8 +3,9 @@ import {
     HERMIONE_CONFIG_GIST_ID,
     PLAYWRIGHT_CONFIG_GIST_ID,
     PUPPETEER_CONFIG_GIST_ID,
-} from 'constants/gists';
-import type { TemplateTypes } from 'types/args';
+} from '../constants/gists';
+
+import type { TemplateTypes } from '../types/args';
 
 const GIST_MAP: Record<TemplateTypes, string> = {
     hermione: HERMIONE_CONFIG_GIST_ID,
