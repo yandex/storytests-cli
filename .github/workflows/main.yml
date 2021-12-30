@@ -78,15 +78,13 @@ jobs:
           minor-wording: 'feat'
           patch-wording: 'fix'
 
-      - name: Exit if bump is not needed
-        if: steps.bump-version.outputs.version == 'null'
-        run: echo "No bump needed - aborting job" && exit 0
-
       - name: Set cache directory
+        if: steps.bump-version.outputs.version != null
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
 
       - uses: actions/cache@v2
+        if: steps.bump-version.outputs.version != null
         id: yarn-cache
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
@@ -95,9 +93,11 @@ jobs:
             ${{ runner.os }}-yarn-
 
       - name: Install dependencies
+        if: steps.bump-version.outputs.version != null
         run: yarn --frozen-lockfile
 
       - name: Publish npm
+        if: steps.bump-version.outputs.version != null
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
         run: yarn publish --non-interactive --registry https://registry.npmjs.org/
