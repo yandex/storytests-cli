@@ -1,4 +1,4 @@
-name: Main
+name: main
 
 on:
   push:
@@ -16,6 +16,18 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Set cache directory
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
       - name: Install dependencies
         run: yarn --frozen-lockfile
 
@@ -29,6 +41,18 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+
+      - name: Set cache directory
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
 
       - name: Install dependencies
         run: yarn --frozen-lockfile
@@ -45,13 +69,33 @@ jobs:
           fetch-depth: 0
 
       - name: Bump version
-        uses: 'yakovlev-alexey/bump-package-version-action@v1'
+        id: bump-version
+        uses: 'yakovlev-alexey/bump-package-version-action@v1.0.0'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           major-wording: 'feat!'
           minor-wording: 'feat'
           patch-wording: 'fix'
+
+      - name: Exit if bump is not needed
+        if: steps.bump-version.outputs.version == 'null'
+        run: echo "No bump needed - aborting job" && exit 0
+
+      - name: Set cache directory
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        run: yarn --frozen-lockfile
 
       - name: Publish npm
         env:
