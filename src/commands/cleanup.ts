@@ -2,6 +2,7 @@ import { promises as fs } from 'fs';
 
 import { getStoryFiles } from '../utils/get-story-files';
 import { getComponentName } from '../utils/get-component-name';
+import { readDirectoryRecur } from '../utils/read-directory-recur';
 import { getComponentStories } from '../utils/get-component-stories';
 import { getTestDirectoryPath } from '../utils/get-test-directory-path';
 
@@ -34,7 +35,7 @@ const cleanup = async ({ config }: CleanupArgs): Promise<void> => {
             relativeTestDirectoryPath,
         );
 
-        const files = await fs.readdir(testDirectory);
+        const files = await readDirectoryRecur(testDirectory);
 
         // eslint-disable-next-line
         console.log(files);
