@@ -9,6 +9,8 @@ const config: Record<string, unknown> = {
 
     componentNamePattern: /./,
     storyNamePattern: /./,
+
+    validateFileName: () => {},
 };
 
 export { config };

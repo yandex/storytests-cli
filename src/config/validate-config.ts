@@ -13,10 +13,6 @@ const validateConfig = (object: unknown): object is Config => {
     }
 
     schemaKeys.forEach((key) => {
-        if (object[key] === undefined) {
-            throw new Error(`Config key ${key} must be defined`);
-        }
-
         const [isValid, error] = schema[key];
 
         if (!isValid(object[key])) {

@@ -3,6 +3,7 @@ import yargs from 'yargs';
 import { injectConfig } from 'utils/inject-config';
 
 import { generate } from 'commands/generate';
+import { cleanup } from 'commands/cleanup';
 import { init } from 'commands/init';
 
 import type { InitArgs } from 'types/args';
@@ -45,6 +46,28 @@ const args = yargs
                 });
         },
         injectConfig(generate),
+    )
+    .command(
+        ['cleanup'],
+        'Delete test files from stories that no longer exist',
+        (yargs) => {
+            return yargs
+                .option('dry', {
+                    describe:
+                        'Only print files to delete, but do not actually delete them',
+                    boolean: true,
+                    default: false,
+                })
+                .option('config', {
+                    alias: 'c',
+                    describe: 'Specify config path',
+                    type: 'string',
+                    nargs: 1,
+                    default: null,
+                    demandOption: false,
+                });
+        },
+        injectConfig(cleanup),
     )
     .option('verbose', {
         boolean: true,

@@ -114,6 +114,12 @@ You can also display a help message with `--help`.
 
     A function that gets called before `testTemplate` and should return the file name. If `testGenerationStrategy` is set to `component`, `name` parameter is the matched component name, otherwise it is the story name.
 
+-   ```ts
+    validateFileName: (path: string, component: string, stories: string[]) => boolean;
+    ```
+
+    A function that gets called for every unvalidated file when running `cleanup` command. `path` parameter stores relative path from test directory (calculated using `relativeTestDirectoryPath`). `component` and `stories` parameters store matched component names and all matched stories (matches from `componentNamePattern` and `storyNamePattern`). Should return `true` if file is valid and `false` if file shoudl get removed (e.g. a screenshot from a removed story).
+
 ## Example
 
 Let's imagine we have a simple Button component story:

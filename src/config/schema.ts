@@ -1,25 +1,18 @@
-import type { Config } from 'types/config';
-
-const isRegExp = (value: unknown): value is RegExp => value instanceof RegExp;
-
-// eslint-disable-next-line @typescript-eslint/ban-types
-const isFunction = (value: unknown): value is Function =>
-    typeof value === 'function';
-
-const isString = (value: unknown): value is string => typeof value === 'string';
-
-const isArray = <T>(isType: (value: unknown) => value is T) => {
-    return (value: unknown): value is Array<T> =>
-        Array.isArray(value) && value.length > 0 && value.every(isType);
-};
-
-const isStrategy = (value: unknown): value is 'story' | 'component' =>
-    value === 'story' || value === 'component';
+import type { Config, Schema } from 'types/config';
+import {
+    combine,
+    isArray,
+    isFunction,
+    isOptional,
+    isRegExp,
+    isStrategy,
+    isString,
+} from './validators';
 
 const generateErrorMessage = (key: string, expected: string) =>
     `Config key ${key} must be ${expected}`;
 
-const schema: Record<keyof Config, [(_: unknown) => boolean, string]> = {
+const schema: Schema<Config> = {
     testTemplate: [
         isFunction,
         generateErrorMessage('testTemplate', 'a function'),
@@ -55,7 +48,12 @@ const schema: Record<keyof Config, [(_: unknown) => boolean, string]> = {
     ],
     storyNamePattern: [
         isRegExp,
-        generateErrorMessage('componentNamePattern', 'a regular expression'),
+        generateErrorMessage('storyNamePattern', 'a regular expression'),
+    ],
+
+    validateFileName: [
+        combine(isFunction, isOptional),
+        generateErrorMessage('validateFileName', 'a function'),
     ],
 };
 

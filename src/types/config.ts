@@ -13,6 +13,24 @@ type Config = {
 
     componentNamePattern: RegExp | string;
     storyNamePattern: RegExp | string;
+
+    validateFileName?: (
+        path: string,
+        component: string,
+        stories: string[],
+    ) => boolean;
 };
 
-export type { Config };
+/* eslint-disable @typescript-eslint/ban-types*/
+type AnyFunctionUnion<T> = Extract<T, Function> extends never
+    ? T
+    : Exclude<T, Function> | Function;
+/* eslint-enable @typescript-eslint/ban-types*/
+
+type Schema<T> = {
+    [Key in keyof T]-?: [Validator<AnyFunctionUnion<T[Key]>>, string];
+};
+
+type Validator<T> = (value: unknown) => value is T;
+
+export type { Config, Schema, Validator };

@@ -65,9 +65,14 @@ describe('validate-config', () => {
         expect(validateForValue(config)).toThrowError();
     });
 
-    test('fails when a field is missing', () => {
+    test('fails when a required field is missing', () => {
         delete config['storyNamePattern'];
         expect(validateForValue(config)).toThrowError(/storyNamePattern/);
+    });
+
+    test('doesnt fail when an optional field is missing', () => {
+        delete config['validateFileName'];
+        expect(validateConfig(config)).toBe(true);
     });
 
     test('fails when excess fields are provided and enumerates them', () => {
