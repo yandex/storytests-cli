@@ -1,0 +1,59 @@
+name: Main
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  sanity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Install dependencies
+        run: yarn --frozen-lockfile
+
+      - name: Lint
+        run: yarn lint
+
+  unit:
+    needs: sanity
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Install dependencies
+        run: yarn --frozen-lockfile
+
+      - name: Test
+        run: yarn test
+
+  release:
+    needs: unit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Bump version
+        uses: 'yakovlev-alexey/bump-package-version-action@v1'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          major-wording: 'feat!'
+          minor-wording: 'feat'
+          patch-wording: 'fix'
+
+      - name: Publish npm
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+        run: yarn publish --non-interactive --registry https://registry.npmjs.org/
