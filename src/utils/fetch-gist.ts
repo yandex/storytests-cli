@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 
-import { GITHUB_GISTS_API } from 'src/constants/github';
-import type { GitHubGist } from 'src/types/github';
+import { GITHUB_GISTS_API } from 'constants/github';
+import type { GitHubGist } from 'types/github';
 
 const fetchGist = async (id: string): Promise<GitHubGist> => {
     const result = await fetch(GITHUB_GISTS_API + '/' + id, {

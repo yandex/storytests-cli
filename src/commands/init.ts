@@ -1,10 +1,10 @@
-import { fsExists } from 'src/utils/fs-exists';
-import { writeFile } from 'src/utils/write-file';
-import { fetchGist } from 'src/utils/fetch-gist';
-import { getGistId } from 'src/utils/get-gist-id';
-import { generateModuleNames } from 'src/utils/generate-module-names';
+import { fsExists } from 'utils/fs-exists';
+import { writeFile } from 'utils/write-file';
+import { fetchGist } from 'utils/fetch-gist';
+import { getGistId } from 'utils/get-gist-id';
+import { generateModuleNames } from 'utils/generate-module-names';
 
-import type { InitArgs } from 'src/types/args';
+import type { InitArgs } from 'types/args';
 
 const init = async ({ template }: InitArgs): Promise<void> => {
     const moduleNames = generateModuleNames('storytests');

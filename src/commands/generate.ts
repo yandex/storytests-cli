@@ -1,14 +1,14 @@
 import { promises as fs } from 'fs';
 
-import { loadConfig } from 'src/config/config';
+import { loadConfig } from 'config/config';
 
-import { generateTest } from 'src/utils/generate-test';
-import { getStoryFiles } from 'src/utils/get-story-files';
-import { getComponentName } from 'src/utils/get-component-name';
-import { getComponentStories } from 'src/utils/get-component-stories';
-import { getTestDirectoryPath } from 'src/utils/get-test-directory-path';
+import { generateTest } from 'utils/generate-test';
+import { getStoryFiles } from 'utils/get-story-files';
+import { getComponentName } from 'utils/get-component-name';
+import { getComponentStories } from 'utils/get-component-stories';
+import { getTestDirectoryPath } from 'utils/get-test-directory-path';
 
-import type { GenerateArgs } from 'src/types/args';
+import type { GenerateArgs } from 'types/args';
 
 const generate = async ({
     config: configPath,

@@ -1,7 +1,7 @@
 import { cosmiconfig } from 'cosmiconfig';
 
-import type { Config } from 'src/types/config';
-import { generateModuleNames } from 'src/utils/generate-module-names';
+import type { Config } from 'types/config';
+import { generateModuleNames } from 'utils/generate-module-names';
 
 import { validateConfig } from './validate-config';
 

@@ -1,4 +1,4 @@
-import type { Config } from 'src/types/config';
+import type { Config } from 'types/config';
 
 const isRegExp = (value: unknown): value is RegExp => value instanceof RegExp;
 

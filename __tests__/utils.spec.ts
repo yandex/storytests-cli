@@ -1,15 +1,15 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 
-import * as helpersMocks from '../__mocks__/utils.mock';
-import * as helpersStubs from '../__mocks__/utils.stub';
+import * as utilsMocks from '../__mocks__/utils.mock';
+import * as utilsStubs from '../__mocks__/utils.stub';
 
 jest.mock('glob', () => ({
     __esModule: true,
     default: jest.fn(),
 }));
 
-jest.mock('../src/helpers/fs-exists', () => ({
+jest.mock('../src/utils/fs-exists', () => ({
     __esModule: true,
     fsExists: jest.fn(),
 }));
@@ -22,7 +22,7 @@ import { getComponentName } from '../src/utils/get-component-name';
 import { getComponentStories } from '../src/utils/get-component-stories';
 import { getTestDirectoryPath } from '../src/utils/get-test-directory-path';
 
-const { testTemplateMock } = helpersMocks;
+const { testTemplateMock } = utilsMocks;
 
 const {
     componentNamePattern,
@@ -30,9 +30,9 @@ const {
     storyNamePattern,
     testDirectoryPath,
     testFilePostfixes,
-} = helpersStubs;
+} = utilsStubs;
 
-describe('helpers', () => {
+describe('utils', () => {
     let fileContent: string;
     const pathToGeneratedTestDirectory = path.resolve(
         __dirname,
