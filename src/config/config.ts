@@ -2,7 +2,7 @@ import { cosmiconfig } from 'cosmiconfig';
 
 import { validateConfig } from './validate-config';
 import type { TConfig } from 'src/types/config';
-import { generateModuleNames } from 'src/helpers/generate-module-names';
+import { generateModuleNames } from 'src/utils/generate-module-names';
 
 const explorer = cosmiconfig('storytests', {
     searchPlaces: generateModuleNames('storytests'),

@@ -1,8 +1,8 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 
-import * as helpersMocks from '../__mocks__/helpers.mock';
-import * as helpersStubs from '../__mocks__/helpers.stub';
+import * as helpersMocks from '../__mocks__/utils.mock';
+import * as helpersStubs from '../__mocks__/utils.stub';
 
 jest.mock('glob', () => ({
     __esModule: true,
@@ -15,12 +15,12 @@ jest.mock('../src/helpers/fs-exists', () => ({
 }));
 
 import * as globModule from 'glob';
-import * as fsExistsModule from '../src/helpers/fs-exists';
+import * as fsExistsModule from '../src/utils/fs-exists';
 
-import { generateTest } from '../src/helpers/generate-test';
-import { getComponentName } from '../src/helpers/get-component-name';
-import { getComponentStories } from '../src/helpers/get-component-stories';
-import { getTestDirectoryPath } from '../src/helpers/get-test-directory-path';
+import { generateTest } from '../src/utils/generate-test';
+import { getComponentName } from '../src/utils/get-component-name';
+import { getComponentStories } from '../src/utils/get-component-stories';
+import { getTestDirectoryPath } from '../src/utils/get-test-directory-path';
 
 const { testTemplateMock } = helpersMocks;
 

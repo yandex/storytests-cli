@@ -1,8 +1,8 @@
-import { fsExists } from 'src/helpers/fs-exists';
-import { writeFile } from 'src/helpers/write-file';
-import { fetchGist } from 'src/helpers/fetch-gist';
-import { getGistId } from 'src/helpers/get-gist-id';
-import { generateModuleNames } from 'src/helpers/generate-module-names';
+import { fsExists } from 'src/utils/fs-exists';
+import { writeFile } from 'src/utils/write-file';
+import { fetchGist } from 'src/utils/fetch-gist';
+import { getGistId } from 'src/utils/get-gist-id';
+import { generateModuleNames } from 'src/utils/generate-module-names';
 
 import type { TInitArgs } from 'src/types/args';
 
