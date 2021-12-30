@@ -1,18 +1,19 @@
 import { promises as fs } from 'fs';
 
 import { loadConfig } from 'src/config/config';
+
 import { generateTest } from 'src/utils/generate-test';
 import { getStoryFiles } from 'src/utils/get-story-files';
 import { getComponentName } from 'src/utils/get-component-name';
 import { getComponentStories } from 'src/utils/get-component-stories';
 import { getTestDirectoryPath } from 'src/utils/get-test-directory-path';
 
-import type { TGenerateArgs } from 'src/types/args';
+import type { GenerateArgs } from 'src/types/args';
 
 const generate = async ({
     config: configPath,
     rewrite,
-}: TGenerateArgs): Promise<void> => {
+}: GenerateArgs): Promise<void> => {
     const config = await loadConfig(configPath);
 
     const {

@@ -4,9 +4,9 @@ import { fetchGist } from 'src/utils/fetch-gist';
 import { getGistId } from 'src/utils/get-gist-id';
 import { generateModuleNames } from 'src/utils/generate-module-names';
 
-import type { TInitArgs } from 'src/types/args';
+import type { InitArgs } from 'src/types/args';
 
-const init = async ({ template }: TInitArgs): Promise<void> => {
+const init = async ({ template }: InitArgs): Promise<void> => {
     const moduleNames = generateModuleNames('storytests');
 
     const exists = (await Promise.all(moduleNames.map(fsExists))).some(Boolean);

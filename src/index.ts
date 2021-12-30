@@ -2,7 +2,8 @@ import yargs from 'yargs';
 
 import { generate } from 'src/commands/generate';
 import { init } from 'src/commands/init';
-import type { TInitArgs } from './types/args';
+
+import type { InitArgs } from 'src/types/args';
 
 const argv = yargs
     .command(
@@ -18,7 +19,7 @@ const argv = yargs
             });
         },
         (args) => {
-            init(args as TInitArgs);
+            init(args as InitArgs);
         },
     )
     .command(

@@ -1,4 +1,4 @@
-type TConfig = {
+type Config = {
     testTemplate: (
         component: string,
         story: string | string[],
@@ -15,4 +15,4 @@ type TConfig = {
     storyNamePattern: RegExp | string;
 };
 
-export type { TConfig };
+export type { Config };

@@ -1,12 +1,12 @@
-type TGenerateArgs = {
+type GenerateArgs = {
     rewrite: boolean;
     config: string | null;
 };
 
-type TTemplateTypes = 'hermione' | 'playwright' | 'puppeteer';
+type TemplateTypes = 'hermione' | 'playwright' | 'puppeteer';
 
-type TInitArgs = {
-    template?: TTemplateTypes;
+type InitArgs = {
+    template?: TemplateTypes;
 };
 
-export type { TGenerateArgs, TInitArgs, TTemplateTypes };
+export type { GenerateArgs, InitArgs, TemplateTypes };

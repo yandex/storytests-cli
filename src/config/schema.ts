@@ -1,4 +1,4 @@
-import type { TConfig } from 'src/types/config';
+import type { Config } from 'src/types/config';
 
 const isRegExp = (value: unknown): value is RegExp => value instanceof RegExp;
 
@@ -19,7 +19,7 @@ const isStrategy = (value: unknown): value is 'story' | 'component' =>
 const generateErrorMessage = (key: string, expected: string) =>
     `Config key ${key} must be ${expected}`;
 
-const schema: Record<keyof TConfig, [(_: unknown) => boolean, string]> = {
+const schema: Record<keyof Config, [(_: unknown) => boolean, string]> = {
     testTemplate: [
         isFunction,
         generateErrorMessage('testTemplate', 'a function'),

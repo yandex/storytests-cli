@@ -1,4 +1,4 @@
-type TGitHubFile = {
+type GitHubFile = {
     filename: string;
     type: string;
     size: string;
@@ -6,10 +6,10 @@ type TGitHubFile = {
     content: string;
 };
 
-type TGitHubGist = {
+type GitHubGist = {
     id: string;
     url: string;
-    files: Record<string, TGitHubFile>;
+    files: Record<string, GitHubFile>;
 };
 
-export type { TGitHubFile, TGitHubGist };
+export type { GitHubFile, GitHubGist };
