@@ -1,6 +1,8 @@
 node_modules
 dist
 bin
+__mocks__
+__tests__
 
 build.js
 *.config.js

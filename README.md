@@ -4,15 +4,14 @@ Framework agnostic CLI Utility to generate test files from matched [Storybook](h
 
 ## Table of Contents
 
-  * [Storytests CLI](#storytests-cli)
-  * [Table of Contents](#table-of-contents)
-  * [Installation](#installation)
-  * [Usage](#usage)
-  * [Configuration](#configuration)
-  * [Example](#example)
-  * [Acknowledgements](#acknowledgements)
-  * [License](#license)
-
+-   [Storytests CLI](#storytests-cli)
+-   [Table of Contents](#table-of-contents)
+-   [Installation](#installation)
+-   [Usage](#usage)
+-   [Configuration](#configuration)
+-   [Example](#example)
+-   [Acknowledgements](#acknowledgements)
+-   [License](#license)
 
 ## Installation
 
@@ -63,56 +62,67 @@ You can also display a help message with `--help`.
 `storytests-cli` can be configured with the following properties:
 
 -   ```ts
-    testGenerationStrategy: 'component' | 'story';
+    strategy: 'component' | 'story';
     ```
 
     When set to `'component'` a separate test file will be created for every matched **file**. When set to `'story'` a separate test file will be created for every matched **story** in a file.
 
 -   ```ts
-    relativeTestDirectoryPath: string;
+    testDirectoy: ((component: string, path: string) => string) | string;
     ```
 
-    Path to the folder where test files will be created relative to the matched file folder.
+    Path to the folder where test files will be created relative to the matched file folder. Can be either a function or a string. Relative paths are supported: in this case they will be resolve against matched file directory.
 
 -   ```ts
-    testFilePostfixes: string[];
+    postfixes: string[];
     ```
 
     Postfixes for generated test files. For example, to create [`hermione`](https://github.com/gemini-testing/hermione) and other generic test files you can specify `['hermione', 'test']` as the value.
 
 -   ```ts
-    storyFilesPath: string[];
+    filesGlob: string;
     ```
 
     Absolute path glob pattern to match desired story files.
 
 -   ```ts
-    componentNamePattern: RegExp;
+    componentPattern: RegExp;
     ```
 
     RegExp to match the component name in a Storybook file.
 
 -   ```ts
-    storyNamePattern: RegExp;
+    storyPattern: RegExp;
     ```
 
     RegExp to match the story names in a Storybook file.
 
 -   ```ts
-    testTemplate: (
+    generateTest: (
         component: string,
         story: string | string[],
         postfix: string,
     ) => string | false;
     ```
 
-    A function that gets called for every file with every possible combination of stories/postfixes and should return test file content. Recieves matched component name (the result of the match from `componentNamePattern`), stories matched from `storyNamePattern` in the file or a single story name (if `testGenerationStrategy` is set to `'story'`), as well as the postfix from `testFilePostfixes`. This function could also return `false` (not any other falsy value though), then no test file for this combination of arguments will be created.
+    A function that gets called for every file with every possible combination of stories/postfixes and should return test file content. Recieves matched component name (the result of the match from `componentPattern`), stories matched from `storyPattern` in the file or a single story name (if `strategy` is set to `'story'`), as well as the postfix from `postfixes`. This function could also return `false` (not any other falsy value though), then no test file for this combination of arguments will be created.
 
 -   ```ts
-    generateFileName: (name: string, postfix: string) => string;
+    generateFileName: (
+        component: string,
+        story: string | string[],
+        postfix: string,
+    ) => string;
     ```
 
-    A function that gets called before `testTemplate` and should return the file name. If `testGenerationStrategy` is set to `component`, `name` parameter is the matched component name, otherwise it is the story name.
+    A function that gets called before `generateTest` and should return the file name. Has identical signature to `generateTest` except it should not return `false`.
+
+-   ```ts
+    validateFileName: (path: string, component: string, stories: string[]) =>
+        boolean;
+    ```
+
+    A function that gets called for every unvalidated file when running `cleanup` command. `path` parameter stores relative path from test directory (calculated using `testDirectory`). `component` and `stories` parameters store matched component names and all matched stories (matches from `componentPattern` and `storyPattern`). Should return `true` if file is valid and `false` if file shoudl get removed (e.g. a screenshot from a removed story).
 
 ## Example
 
@@ -155,88 +165,88 @@ const hermioneTemplate = require('./storytests/hermione.template');
 const playwrightTemplate = require('./storytests/playwright.template');
 
 module.exports = {
-  /**
-   * Should match `Components/Button`
-   * ```
-   * export default {
-   *   title: "Components/Button",
-   *   component: Button,
-   * } as Meta;
-   * ```
-   */
-  componentNamePattern: /(?<=title: ")[a-z/]+/gi,
+    /**
+     * Should match `Components/Button`
+     * ```
+     * export default {
+     *   title: "Components/Button",
+     *   component: Button,
+     * } as Meta;
+     * ```
+     */
+    componentPattern: /(?<=title: ")[a-z/]+/gi,
 
-  /**
-   * Should match `Primary`
-   * ```
-   * export const Primary = Template.bind({});
-   * ```
-   *
-   * Should not match `Playground`
-   * ```
-   * // @storytests-ignore
-   * export const Playground = Template.bind({});
-   * ```
-   */
-  storyNamePattern: /(?<!\/\/ @storytests-ignore[ \r\n]export const )\b[a-z]+(?= = Template.bind\()/gi,
+    /**
+     * Should match `Primary`
+     * ```
+     * export const Primary = Template.bind({});
+     * ```
+     *
+     * Should not match `Playground`
+     * ```
+     * // @storytests-ignore
+     * export const Playground = Template.bind({});
+     * ```
+     */
+    storyPattern: /(?<!\/\/ @storytests-ignore[ \r\n]export const )\b[a-z]+(?= = Template.bind\()/gi,
 
-  /**
-   * Generate a single test file for a single component, not for every story
-   */
-  testGenerationStrategy: 'component',
+    /**
+     * Generate a single test file for a single component, not for every story
+     */
+    strategy: 'component',
 
-  /**
-   * Generate test files in the same directory as stories file
-   */
-  relativeTestDirectoryPath: './',
+    /**
+     * Generate test files in the same directory as stories file
+     */
+    testDirectory: './',
 
-  /**
-   * Generate `hermione` and `playwright` (though we can use any names here, they get passed to our hooks)
-   */
-  testFilePostfixes: ['hermione', 'playwright'],
+    /**
+     * Generate `hermione` and `playwright` (though we can use any names here, they get passed to our hooks)
+     */
+    postfixes: ['hermione', 'playwright'],
 
-  /**
-   * Glob pattern to match story files
-   */
-  storyFilesPath: path.resolve(__dirname, './src/**/*.stories.tsx'),
+    /**
+     * Glob pattern to match story files
+     */
+    filesGlob: path.resolve(__dirname, './src/**/*.stories.tsx'),
 
-  /**
-   * A hook function to generate test file contents
-   * @param {string} componentPath component name (match from `componentNamePattern`)
-   * @param {string[]} stories story names as an array (matches from `storyNamePattern`, could be empty)
-   * @param {string} postfix test file postfix
-   * @returns {string|false} could return false then this file will not be generated
-   */
-  testTemplate: (componentPath, stories, postfix) => {
-    switch (postfix) {
-      case 'hermione':
-        return hermioneTemplate(componentPath, stories);
-      case 'playwright':
-        return playwrightTemplate(componentPath, stories);
-      default:
-        return false;
-    }
-  },
+    /**
+     * A hook function to generate test file contents
+     * @param {string} componentPath component name (match from `componentPattern`)
+     * @param {string[]} stories story names as an array (matches from `storyPattern`, could be empty)
+     * @param {string} postfix test file postfix
+     * @returns {string|false} could return false then this file will not be generated
+     */
+    generateTest: (componentPath, stories, postfix) => {
+        switch (postfix) {
+            case 'hermione':
+                return hermioneTemplate(componentPath, stories);
+            case 'playwright':
+                return playwrightTemplate(componentPath, stories);
+            default:
+                return false;
+        }
+    },
 
-  /**
-   * A hook function to generate file name
-   */
-  generateFileName: (componentPath, postfix) => {
-    const componentParts = componentPath.split('/');
+    /**
+     * A hook function to generate file name
+     */
+    generateFileName: (componentPath, _stories, postfix) => {
+        const componentParts = componentPath.split('/');
 
-    const component = componentParts[
-      componentParts.length - 1
-    ].toLowerCase();
+        const component = componentParts[
+            componentParts.length - 1
+        ].toLowerCase();
 
-    const isPlaywright = postfix === 'playwright';
+        const isPlaywright = postfix === 'playwright';
 
-    const type = isPlaywright ? 'spec' : postfix;
+        const type = isPlaywright ? 'spec' : postfix;
 
-    const extention = isPlaywright ? 'ts' : 'js';
+        const extention = isPlaywright ? 'ts' : 'js';
 
-    // Even though we specified `playwright` as a postfix in the config we are free to use any names we want
-    return `${component}.${type}.${extention}`;
-  },
+        // Even though we specified `playwright` as a postfix in the config we are free to use any names we want
+        return `${component}.${type}.${extention}`;
+    },
 };
 ````
 
@@ -249,32 +259,32 @@ Now when we run `yarn storytests` in the project we should see `button.hermione.
  * @param {string[]} stories story names as an array
  */
 const hermioneTemplate = (componentPath, stories) => {
-  if (stories.length === 0) {
-    return false;
-  }
+    if (stories.length === 0) {
+        return false;
+    }
 
-  const kebabCaseComponent = componentPath.toLowerCase().replace(/\//g, "-");
-  const componentParts = componentPath.split("/");
-  const component = componentParts[componentParts.length - 1];
-  const kebabCaseStories = stories.map((story) =>
-    story.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase()
-  );
-  const storyNames = stories.map((story) =>
-    story.replace(/([a-z])([A-Z])/g, "$1 $2")
-  );
+    const kebabCaseComponent = componentPath.toLowerCase().replace(/\//g, '-');
+    const componentParts = componentPath.split('/');
+    const component = componentParts[componentParts.length - 1];
+    const kebabCaseStories = stories.map((story) =>
+        story.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase(),
+    );
+    const storyNames = stories.map((story) =>
+        story.replace(/([a-z])([A-Z])/g, '$1 $2'),
+    );
 
-  return `describe("${component}", function () {
+    return `describe("${component}", function () {
   const selector = ".story";
         ${kebabCaseStories
-          .map(
-            (story, index) => `
+            .map(
+                (story, index) => `
   it("${storyNames[index]}", function () {
     return this.browser
       .url("iframe.html?id=${kebabCaseComponent}--${story}")
       .assertView("${story}", selector);
-  });`
-          )
-          .join("\n")}
+  });`,
+            )
+            .join('\n')}
 });
 `;
 };
@@ -282,21 +292,19 @@ const hermioneTemplate = (componentPath, stories) => {
 module.exports = hermioneTemplate;
 ```
 
-Resulting `button.hermione.js` could look something like this: 
-
+Resulting `button.hermione.js` could look something like this:
 
 ```javascript
-describe("Button", function () {
-  const selector = ".story";
-        
-  it("Primary", function () {
-    return this.browser
-      .url("iframe.html?id=components-button--primary")
-      .assertView("primary", selector);
-  });
+describe('Button', function () {
+    const selector = '.story';
 
-  // ...
+    it('Primary', function () {
+        return this.browser
+            .url('iframe.html?id=components-button--primary')
+            .assertView('primary', selector);
+    });
 
+    // ...
 });
 ```
 

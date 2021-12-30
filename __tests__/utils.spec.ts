@@ -1,28 +1,28 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 
-import * as helpersMocks from '../__mocks__/helpers.mock';
-import * as helpersStubs from '../__mocks__/helpers.stub';
+import * as utilsMocks from '../__mocks__/utils.mock';
+import * as utilsStubs from '../__mocks__/utils.stub';
 
 jest.mock('glob', () => ({
     __esModule: true,
     default: jest.fn(),
 }));
 
-jest.mock('../src/helpers/fs-exists', () => ({
+jest.mock('../src/utils/fs-exists', () => ({
     __esModule: true,
     fsExists: jest.fn(),
 }));
 
 import * as globModule from 'glob';
-import * as fsExistsModule from '../src/helpers/fs-exists';
+import * as fsExistsModule from '../src/utils/fs-exists';
 
-import { generateTest } from '../src/helpers/generate-test';
-import { getComponentName } from '../src/helpers/get-component-name';
-import { getComponentStories } from '../src/helpers/get-component-stories';
-import { getTestDirectoryPath } from '../src/helpers/get-test-directory-path';
+import { generateTestFile } from '../src/utils/generate-test-file';
+import { getComponentName } from '../src/utils/get-component-name';
+import { getComponentStories } from '../src/utils/get-component-stories';
+import { getTestDirectoryPath } from '../src/utils/get-test-directory-path';
 
-const { testTemplateMock } = helpersMocks;
+const { testTemplateMock } = utilsMocks;
 
 const {
     componentNamePattern,
@@ -30,9 +30,9 @@ const {
     storyNamePattern,
     testDirectoryPath,
     testFilePostfixes,
-} = helpersStubs;
+} = utilsStubs;
 
-describe('helpers', () => {
+describe('utils', () => {
     let fileContent: string;
     const pathToGeneratedTestDirectory = path.resolve(
         __dirname,
@@ -74,10 +74,22 @@ describe('helpers', () => {
     });
 
     describe('getTestDirectoryPath', () => {
-        test('should return path to generated test directory', () => {
+        test('should return path to generated test directory if it is a relative path', () => {
             expect(
-                getTestDirectoryPath(pathToStory, testDirectoryPath),
+                getTestDirectoryPath('', pathToStory, testDirectoryPath),
             ).toEqual(pathToGeneratedTestDirectory);
+        });
+
+        test('should return value from function if a function is passed', () => {
+            expect(getTestDirectoryPath('', pathToStory, () => 'path')).toEqual(
+                'path',
+            );
+        });
+
+        test('should return testDirectory value if it is an absolute path', () => {
+            expect(
+                getTestDirectoryPath('', pathToStory, '/users/Admin/smth'),
+            ).toEqual('/users/Admin/smth');
         });
     });
 
@@ -92,12 +104,12 @@ describe('helpers', () => {
 
         test('should return matched story file paths', () => {
             expect(
-                getTestDirectoryPath(pathToStory, testDirectoryPath),
+                getTestDirectoryPath('', pathToStory, testDirectoryPath),
             ).toEqual(pathToGeneratedTestDirectory);
         });
     });
 
-    describe('generateTest', () => {
+    describe('generateTestFile', () => {
         const componentName = 'Components/RoundedButton';
         const componentStoryNames = ['SecondaryWithLongLabel'];
         const filename = 'rounded-button.hermione.js';
@@ -118,8 +130,12 @@ describe('helpers', () => {
                 () => new Promise((resolve) => resolve(false)),
             );
 
-            await generateTest(
-                getTestDirectoryPath(pathToStory, testDirectoryPath),
+            await generateTestFile(
+                getTestDirectoryPath(
+                    componentName,
+                    pathToStory,
+                    testDirectoryPath,
+                ),
                 filename,
                 componentName,
                 componentStoryNames,
@@ -136,8 +152,12 @@ describe('helpers', () => {
                 () => new Promise((resolve) => resolve(true)),
             );
 
-            await generateTest(
-                getTestDirectoryPath(pathToStory, testDirectoryPath),
+            await generateTestFile(
+                getTestDirectoryPath(
+                    componentName,
+                    pathToStory,
+                    testDirectoryPath,
+                ),
                 filename,
                 componentName,
                 componentStoryNames,
@@ -154,8 +174,12 @@ describe('helpers', () => {
                 () => new Promise((resolve) => resolve(true)),
             );
 
-            await generateTest(
-                getTestDirectoryPath(pathToStory, testDirectoryPath),
+            await generateTestFile(
+                getTestDirectoryPath(
+                    componentName,
+                    pathToStory,
+                    testDirectoryPath,
+                ),
                 filename,
                 componentName,
                 componentStoryNames,
@@ -173,8 +197,12 @@ describe('helpers', () => {
                 () => new Promise((resolve) => resolve(false)),
             );
 
-            await generateTest(
-                getTestDirectoryPath(pathToStory, testDirectoryPath),
+            await generateTestFile(
+                getTestDirectoryPath(
+                    componentName,
+                    pathToStory,
+                    testDirectoryPath,
+                ),
                 filename,
                 componentName,
                 componentStoryNames,

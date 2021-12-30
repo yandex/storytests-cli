@@ -1,14 +1,15 @@
 import { cosmiconfig } from 'cosmiconfig';
 
+import type { Config } from '../types/config';
+import { generateModuleNames } from '../utils/generate-module-names';
+
 import { validateConfig } from './validate-config';
-import type { TConfig } from 'src/types/config';
-import { generateModuleNames } from 'src/helpers/generate-module-names';
 
 const explorer = cosmiconfig('storytests', {
     searchPlaces: generateModuleNames('storytests'),
 });
 
-const loadConfig = async (configPath?: string | null): Promise<TConfig> => {
+const loadConfig = async (configPath?: string | null): Promise<Config> => {
     const result = await (configPath
         ? explorer.load(configPath)
         : explorer.search());

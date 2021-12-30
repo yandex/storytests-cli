@@ -22,8 +22,8 @@ describe('validate-config', () => {
         expect(validateForValue({})).toThrowError();
     });
 
-    test('fails when "testTemplate" is not a function', () => {
-        config['testTemplate'] = '';
+    test('fails when "generateTest" is not a function', () => {
+        config['generateTest'] = '';
         expect(validateForValue(config)).toThrowError();
     });
 
@@ -32,42 +32,52 @@ describe('validate-config', () => {
         expect(validateForValue(config)).toThrowError();
     });
 
-    test('fails when "storyFilesPath" is not a string', () => {
-        config['storyFilesPath'] = 1;
+    test('fails when "filesGlob" is not a string', () => {
+        config['filesGlob'] = 1;
         expect(validateForValue(config)).toThrowError();
     });
 
-    test('fails when "relativeTestDirectoryPath" is not a string', () => {
-        config['relativeTestDirectoryPath'] = 1;
+    test('doesnt fail when "testDirectory" is a function', () => {
+        config['testDirectory'] = () => {};
+        expect(validateConfig(config)).toBe(true);
+    });
+
+    test('fails when "testDirectory" is not a string or a function', () => {
+        config['testDirectory'] = 1;
         expect(validateForValue(config)).toThrowError();
     });
 
-    test('fails when "testFilePostfixes" is not an array of string', () => {
-        config['testFilePostfixes'] = '';
+    test('fails when "postfixes" is not an array of string', () => {
+        config['postfixes'] = '';
         expect(validateForValue(config)).toThrowError();
 
-        config['testFilePostfixes'] = [];
-        expect(validateForValue(config)).toThrowError();
-    });
-
-    test('fails when "testGenerationStrategy" is not one of "component" or "story"', () => {
-        config['testGenerationStrategy'] = '';
+        config['postfixes'] = [];
         expect(validateForValue(config)).toThrowError();
     });
 
-    test('fails when "componentNamePattern" is not a regular expression', () => {
-        config['componentNamePattern'] = '';
+    test('fails when "strategy" is not one of "component" or "story"', () => {
+        config['strategy'] = '';
         expect(validateForValue(config)).toThrowError();
     });
 
-    test('fails when "storyNamePattern" is not a regular expression', () => {
-        config['storyNamePattern'] = '';
+    test('fails when "componentPattern" is not a regular expression', () => {
+        config['componentPattern'] = '';
         expect(validateForValue(config)).toThrowError();
     });
 
-    test('fails when a field is missing', () => {
-        delete config['storyNamePattern'];
-        expect(validateForValue(config)).toThrowError(/storyNamePattern/);
+    test('fails when "storyPattern" is not a regular expression', () => {
+        config['storyPattern'] = '';
+        expect(validateForValue(config)).toThrowError();
+    });
+
+    test('fails when a required field is missing', () => {
+        delete config['storyPattern'];
+        expect(validateForValue(config)).toThrowError();
+    });
+
+    test('doesnt fail when an optional field is missing', () => {
+        delete config['validateFileName'];
+        expect(validateConfig(config)).toBe(true);
     });
 
     test('fails when excess fields are provided and enumerates them', () => {

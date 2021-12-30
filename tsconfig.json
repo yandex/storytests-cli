@@ -1,19 +1,20 @@
 {
     "compilerOptions": {
         "target": "es5",
-        "module": "esnext",
+        "module": "commonjs",
         "moduleResolution": "node",
         "allowJs": false,
-        "baseUrl": "./",
+        "baseUrl": "./src",
+        "outDir": "dist",
+        "declaration": true,
         "removeComments": true,
         "isolatedModules": true,
         "strict": true,
         "esModuleInterop": true,
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
-        "noEmit": true,
         "resolveJsonModule": true
     },
-    "include": ["**/*.ts"],
+    "include": ["src/**/*.ts"],
     "exclude": ["dist", "node_modules"]
 }

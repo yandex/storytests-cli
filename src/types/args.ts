@@ -1,12 +1,39 @@
-type TGenerateArgs = {
-    rewrite: boolean;
-    config: string | null;
+import type { Config } from './config';
+
+type GenerateArgs = {
+    rewrite?: boolean;
+    config: Pick<
+        Config,
+        | 'generateFileName'
+        | 'componentPattern'
+        | 'strategy'
+        | 'generateTest'
+        | 'storyPattern'
+        | 'filesGlob'
+        | 'testDirectory'
+        | 'postfixes'
+    >;
 };
 
-type TTemplateTypes = 'hermione' | 'playwright' | 'puppeteer';
-
-type TInitArgs = {
-    template?: TTemplateTypes;
+type CleanupArgs = {
+    dry?: boolean;
+    config: Pick<
+        Config,
+        | 'generateFileName'
+        | 'strategy'
+        | 'filesGlob'
+        | 'storyPattern'
+        | 'componentPattern'
+        | 'postfixes'
+        | 'testDirectory'
+        | 'validateFileName'
+    >;
 };
 
-export type { TGenerateArgs, TInitArgs, TTemplateTypes };
+type TemplateTypes = 'hermione' | 'playwright' | 'puppeteer';
+
+type InitArgs = {
+    template?: TemplateTypes;
+};
+
+export type { GenerateArgs, CleanupArgs, InitArgs, TemplateTypes };

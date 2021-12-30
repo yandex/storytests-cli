@@ -1,14 +1,16 @@
 const config: Record<string, unknown> = {
-    testTemplate: () => '',
+    generateTest: () => '',
     generateFileName: () => '',
 
-    storyFilesPath: '',
-    relativeTestDirectoryPath: '',
-    testFilePostfixes: [''],
-    testGenerationStrategy: 'component',
+    filesGlob: '',
+    testDirectory: '',
+    postfixes: [''],
+    strategy: 'component',
 
-    componentNamePattern: /./,
-    storyNamePattern: /./,
+    componentPattern: /./,
+    storyPattern: /./,
+
+    validateFileName: () => {},
 };
 
 export { config };

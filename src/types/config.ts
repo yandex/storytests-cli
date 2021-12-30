@@ -1,18 +1,40 @@
-type TConfig = {
-    testTemplate: (
+type Config = {
+    generateTest: (
         component: string,
         story: string | string[],
         postfix: string,
     ) => string | false;
-    generateFileName: (name: string, postfix: string) => string;
+    generateFileName: (
+        component: string,
+        story: string | string[],
+        postfix: string,
+    ) => string;
 
-    storyFilesPath: string;
-    relativeTestDirectoryPath: string;
-    testFilePostfixes: string[];
-    testGenerationStrategy: 'component' | 'story';
+    filesGlob: string;
+    testDirectory: ((component: string, path: string) => string) | string;
+    postfixes: string[];
+    strategy: 'component' | 'story';
 
-    componentNamePattern: RegExp | string;
-    storyNamePattern: RegExp | string;
+    componentPattern: RegExp | string;
+    storyPattern: RegExp | string;
+
+    validateFileName?: (
+        path: string,
+        component: string,
+        stories: string[],
+    ) => boolean;
 };
 
-export type { TConfig };
+/* eslint-disable @typescript-eslint/ban-types*/
+type AnyFunctionUnion<T> = Extract<T, Function> extends never
+    ? T
+    : Exclude<T, Function> | Function;
+/* eslint-enable @typescript-eslint/ban-types*/
+
+type Schema<T> = {
+    [Key in keyof T]-?: [Validator<AnyFunctionUnion<T[Key]>>, string];
+};
+
+type Validator<T> = (value: unknown) => value is T;
+
+export type { Config, Schema, Validator };

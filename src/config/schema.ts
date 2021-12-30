@@ -1,61 +1,55 @@
-import type { TConfig } from 'src/types/config';
+import type { Config, Schema } from '../types/config';
 
-const isRegExp = (value: unknown): value is RegExp => value instanceof RegExp;
-
-// eslint-disable-next-line @typescript-eslint/ban-types
-const isFunction = (value: unknown): value is Function =>
-    typeof value === 'function';
-
-const isString = (value: unknown): value is string => typeof value === 'string';
-
-const isArray = <T>(isType: (value: unknown) => value is T) => {
-    return (value: unknown): value is Array<T> =>
-        Array.isArray(value) && value.length > 0 && value.every(isType);
-};
-
-const isStrategy = (value: unknown): value is 'story' | 'component' =>
-    value === 'story' || value === 'component';
+import {
+    combine,
+    isArray,
+    isFunction,
+    isOptional,
+    isRegExp,
+    isStrategy,
+    isString,
+} from './validators';
 
 const generateErrorMessage = (key: string, expected: string) =>
     `Config key ${key} must be ${expected}`;
 
-const schema: Record<keyof TConfig, [(_: unknown) => boolean, string]> = {
-    testTemplate: [
+const schema: Schema<Config> = {
+    generateTest: [
         isFunction,
-        generateErrorMessage('testTemplate', 'a function'),
+        generateErrorMessage('generateTest', 'a function'),
     ],
     generateFileName: [
         isFunction,
         generateErrorMessage('generateFileName', 'a function'),
     ],
 
-    storyFilesPath: [
-        isString,
-        generateErrorMessage('storyFilesPath', 'a string'),
+    filesGlob: [isString, generateErrorMessage('filesGlob', 'a string')],
+    testDirectory: [
+        // eslint-disable-next-line @typescript-eslint/ban-types
+        combine<Function | string>(isFunction, isString),
+        generateErrorMessage('testDirectory', 'a string or a function'),
     ],
-    relativeTestDirectoryPath: [
-        isString,
-        generateErrorMessage('relativeTestDirectoryPath', 'a string'),
-    ],
-    testFilePostfixes: [
+    postfixes: [
         isArray(isString),
-        generateErrorMessage('testFilesPostfixes', 'an array of strings'),
+        generateErrorMessage('postfixes', 'an array of strings'),
     ],
-    testGenerationStrategy: [
+    strategy: [
         isStrategy,
-        generateErrorMessage(
-            'testGenerationStrategy',
-            'one of "component" or "story"',
-        ),
+        generateErrorMessage('strategy', 'one of "component" or "story"'),
     ],
 
-    componentNamePattern: [
+    componentPattern: [
         isRegExp,
-        generateErrorMessage('componentNamePattern', 'a regular expression'),
+        generateErrorMessage('componentPattern', 'a regular expression'),
     ],
-    storyNamePattern: [
+    storyPattern: [
         isRegExp,
-        generateErrorMessage('componentNamePattern', 'a regular expression'),
+        generateErrorMessage('storyPattern', 'a regular expression'),
+    ],
+
+    validateFileName: [
+        combine(isFunction, isOptional),
+        generateErrorMessage('validateFileName', 'an optional function'),
     ],
 };
 
