@@ -4,7 +4,11 @@ type Config = {
         story: string | string[],
         postfix: string,
     ) => string | false;
-    generateFileName: (name: string, postfix: string) => string;
+    generateFileName: (
+        component: string,
+        story: string | string[],
+        postfix: string,
+    ) => string;
 
     storyFilesPath: string;
     relativeTestDirectoryPath: string;

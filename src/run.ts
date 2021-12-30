@@ -56,7 +56,7 @@ const args = yargs
                     describe:
                         'Only print files to delete, but do not actually delete them',
                     boolean: true,
-                    default: false,
+                    default: true,
                 })
                 .option('config', {
                     alias: 'c',

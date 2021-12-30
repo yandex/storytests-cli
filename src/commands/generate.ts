@@ -40,7 +40,7 @@ const generate = async ({ config, rewrite }: GenerateArgs): Promise<void> => {
             if (testGenerationStrategy === 'component') {
                 generateTest(
                     testDirectory,
-                    generateFileName(componentName, postfix),
+                    generateFileName(componentName, componentStories, postfix),
                     componentName,
                     componentStories,
                     postfix,
@@ -54,7 +54,7 @@ const generate = async ({ config, rewrite }: GenerateArgs): Promise<void> => {
             componentStories.forEach((story) => {
                 generateTest(
                     testDirectory,
-                    generateFileName(story, postfix),
+                    generateFileName(componentName, story, postfix),
                     componentName,
                     story,
                     postfix,

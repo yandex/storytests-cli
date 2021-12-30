@@ -1,7 +1,7 @@
 import type { Config } from './config';
 
 type GenerateArgs = {
-    rewrite: boolean;
+    rewrite?: boolean;
     config: Pick<
         Config,
         | 'generateFileName'
@@ -16,6 +16,7 @@ type GenerateArgs = {
 };
 
 type CleanupArgs = {
+    dry?: boolean;
     config: Pick<
         Config,
         | 'generateFileName'
