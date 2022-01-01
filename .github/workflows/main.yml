@@ -101,3 +101,9 @@ jobs:
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
         run: yarn publish --non-interactive --registry https://registry.npmjs.org/
+
+      - name: Tag latest
+        if: steps.bump-version.outputs.version != null && github.event_name != 'pull_request'
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+        run: yarn tag add --non-interactive storytests-cli@${{ steps.bump-version.outputs.version }} latest
