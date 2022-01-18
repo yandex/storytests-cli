@@ -36,7 +36,7 @@ const cleanup = async ({ config, dry = true }: CleanupArgs): Promise<void> => {
             testDirectory,
         );
 
-        const files = await readDirectoryRecur(testDirPath);
+        const files = await readDirectoryRecur(testDirPath).catch(() => []);
 
         const validNames = getValidFilenames(
             component,
