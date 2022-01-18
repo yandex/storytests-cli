@@ -1,6 +1,6 @@
 {
     "name": "storytests-cli",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "description": "CLI utility to generate tests from Storybook stories",
     "main": "dist/index.js",
     "repository": "https://github.com/yandex/storytests-cli",
